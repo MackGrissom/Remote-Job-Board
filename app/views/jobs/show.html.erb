@@ -1,0 +1,25 @@
+<div class="max-w-4xl mx-auto mt-8">
+  <h1 class="text-3xl font-bold mb-4"><%= @job.title %></h1>
+  
+  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Job Details</h2>
+    
+    <ul class="mt-2 text-gray-600">
+      <li><strong>Location:</strong> <%= @job.location %></li>
+      <li><strong>Salary Range:</strong> <%= number_to_currency(@job.salary_min) %> - <%= number_to_currency(@job.salary_max) %></li>
+      <li><strong>Company:</strong> <%= @job.company %></li>
+      <li><strong>Posted On:</strong> <%= @job.created_at.strftime("%B %d, %Y") %></li>
+      <li><strong>Job Type:</strong> <%= @job.job_type %></li>
+      <li><strong>Industry:</strong> <%= @job.industry %></li>
+      <li><strong>Experience Level:</strong> <%= @job.experience_level %></li>
+    </ul>
+  </div>
+
+  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Job Description</h2>
+    <p class="text-gray-700"><%= @job.description %></p>
+  </div>
+
+  <%= link_to 'Apply Now', @job.apply_link, class: "inline-block px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-150", target: "_blank" %>
+  <%= link_to 'Back to Jobs', jobs_path, class: "inline-block ml-4 px-6 py-3 text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition duration-150" %>
+</div>

@@ -1,0 +1,39 @@
+<div class="container mx-auto py-12 px-6 lg:px-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Post a Job</h1>
+
+  <%= form_with(model: @job, local: true, class: "space-y-6") do |form| %>
+    <div>
+      <%= form.label :title, "Job Title", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :title, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :description, "Job Description", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_area :description, rows: 6, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :company, "Company Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :company, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :location, "Location", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :location, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :salary, "Salary", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.number_field :salary, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :apply_link, "Application Link", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :apply_link, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+    </div>
+
+    <div>
+      <%= form.submit "Post Job", class: "bg-indigo-600 text-white px-6 py-3 rounded-md shadow hover:bg-indigo-700" %>
+    </div>
+  <% end %>
+</div>
