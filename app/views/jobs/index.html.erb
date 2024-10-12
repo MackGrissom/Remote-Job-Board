@@ -7,35 +7,149 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <style>
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
         #map { width: 100%; height: 100%; }
         #job-listings {
-            max-height: calc(100vh - 12rem); /* Adjust this value based on your header and filter form height */
+            max-height: calc(100vh - 12rem);
             overflow-y: auto;
+        }
+        .job-marker-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border-radius: 50%;
+            border: 2px solid #3498db;
+            font-size: 20px;
+            position: relative;
+        }
+        .job-marker {
+            line-height: 30px;
+        }
+        .custom-popup .leaflet-popup-content-wrapper {
+            background-color: white;
+            color: #333;
+            border-radius: 8px;
+            padding: 1px;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+        }
+        .custom-popup .leaflet-popup-content {
+            margin: 13px 19px;
+            line-height: 1.4;
+        }
+        .custom-popup .leaflet-popup-tip {
+            background: white;
+        }
+        .apply-now-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .apply-now-btn:hover {
+            background-color: #45a049;
+        }
+        .job-tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .job-marker-icon:hover .job-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .custom-popup {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            max-width: 300px;
+        }
+        .custom-popup h3 {
+            font-size: 18px;
+            margin: 0 0 10px;
+            color: #2c3e50;
+        }
+        .custom-popup p {
+            margin: 5px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .custom-popup .job-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .custom-popup .job-detail-icon {
+            width: 20px;
+            margin-right: 10px;
+            opacity: 0.7;
+        }
+        .apply-now-btn {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .apply-now-btn:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body class="flex flex-col h-screen bg-gray-100">
+    
     <div class="flex h-full">
-        <!-- Left Column: Filters and Job Listings -->
         <div class="w-1/2 flex flex-col bg-white shadow-lg">
-            <!-- Filters -->
             <div class="p-6 bg-gray-50 border-b border-gray-200">
+                <% if user_signed_in? %>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Work <span class="text-blue-600">Freely</span>, Hire <span class="text-blue-600">Globally</span></h2>
+                <% end %>
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">Job Filters</h2>
-                <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-6' do |f| %>
-                    <!-- Add your filter fields here -->
-                    <%= f.submit 'Apply Filters', class: 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600' %>
+                <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
+                    <div>
+                        <%= f.label :location, "Location", class: "block text-sm font-medium text-gray-700" %>
+                        <%= f.select :location, ['North America', 'South America', 'Europe', 'Asia', 'Africa', 'Australia'], { include_blank: 'All Locations' }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+                    </div>
+                    <div>
+                        <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700" %>
+                        <%= f.select :industry, ['Accounting', 'Advertising', 'Aerospace', 'Agriculture', 'Automotive', 'Banking', 'Biotechnology', 'Broadcasting', 'Business Services', 'Chemicals', 'Communications', 'Construction', 'Consulting', 'Consumer Products', 'Education', 'Electronics', 'Energy', 'Engineering', 'Entertainment', 'Environmental', 'Fashion', 'Finance', 'Food and Beverage', 'Government', 'Healthcare', 'Hospitality', 'Insurance', 'Legal', 'Logistics', 'Manufacturing', 'Marketing', 'Media', 'Mining', 'Non-Profit', 'Pharmaceuticals', 'Public Relations', 'Publishing', 'Real Estate', 'Retail', 'Software', 'Sports', 'Technology', 'Telecommunications', 'Transportation', 'Travel'], { include_blank: 'All Industries' }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+                    </div>
                 <% end %>
             </div>
-
-            <!-- Job Cards (Scrollable) -->
             <div id="job-listings" class="flex-1 overflow-y-auto p-6 space-y-6">
-                <!-- Job listings will be inserted here by JavaScript -->
             </div>
         </div>
-
-        <!-- Right Column: Map -->
         <div class="w-1/2 h-full">
             <div id="map" class="w-full h-full"></div>
         </div>
@@ -47,6 +161,7 @@
         const jobListings = document.getElementById('job-listings');
         const mapContainer = document.getElementById('map');
         let map;
+        let markerClusterGroup;
 
         function initMap() {
           console.log('Initializing map...');
@@ -55,12 +170,17 @@
             return;
           }
 
-          // Ensure the map container has a height
           mapContainer.style.height = '100%';
 
-          map = L.map('map').setView([0, 0], 2);
+          map = L.map('map', {
+            backgroundColor: '#ffffff',
+            minZoom: 2,  // Add this line to set a minimum zoom level
+            maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180))  // Add this line to restrict panning
+          }).setView([20, 0], 3);  // Adjust the initial center and zoom level
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors',
+            backgroundColor: '#ffffff',
+            noWrap: true  // Add this line to prevent tile repetition
           }).addTo(map);
 
           console.log('Map initialized:', map);
@@ -88,6 +208,7 @@
         }
 
         function fetchJobs(searchParams) {
+          console.log('Fetching jobs with params:', searchParams.toString());
           fetch(`/jobs?${searchParams.toString()}`, {
             headers: {
               'Accept': 'application/json',
@@ -96,10 +217,13 @@
           })
           .then(response => response.json())
           .then(data => {
+            console.log('Received data:', data);
             if (data.job_listings_html) {
               jobListings.innerHTML = data.job_listings_html;
+              console.log('Updated job listings');
             }
             if (data.job_coordinates && Array.isArray(data.job_coordinates)) {
+              console.log('Updating map with', data.job_coordinates.length, 'jobs');
               updateMap(data.job_coordinates);
             }
           })
@@ -119,50 +243,93 @@
             console.error('Failed to initialize map');
             return;
           }
-          map.eachLayer(layer => {
-            if (layer instanceof L.Marker) {
-              map.removeLayer(layer);
-            }
-          });
           
+          if (markerClusterGroup) {
+            map.removeLayer(markerClusterGroup);
+          }
+          
+          markerClusterGroup = L.markerClusterGroup();
+
           jobCoordinates.forEach((job, index) => {
             console.log(`Processing job ${index}:`, job);
-            console.log(`Industry for job ${index}:`, job.industry); // Log the industry
             if (job && typeof job === 'object' && 'lat' in job && 'lng' in job) {
               const emoji = getEmojiForIndustry(job.industry);
+              const salaryRange = getSalaryRange(job.salary_min, job.salary_max);
               const customIcon = L.divIcon({
-                className: '', // Ensure no default styling
-                html: `<div class="job-marker-icon"><span class="job-marker">${emoji}</span></div>`,
+                className: '',
+                html: `
+                  <div class="job-marker-icon">
+                    <span class="job-marker">${emoji}</span>
+                    <span class="job-tooltip">
+                      <strong>${job.title || `Job ${index + 1}`}</strong><br>
+                      ${job.company || ''}<br>
+                      ${job.location || ''}<br>
+                      ${salaryRange}
+                    </span>
+                  </div>
+                `,
                 iconSize: [30, 30],
                 iconAnchor: [15, 15]
               });
 
-              const marker = L.marker([job.lat, job.lng], { icon: customIcon }).addTo(map);
-              console.log('Marker added to map:', marker);
+              const marker = L.marker([job.lat, job.lng], { icon: customIcon });
+              console.log(`Added marker for job ${index} at [${job.lat}, ${job.lng}]`);
               
               const popupContent = `
                 <div class="custom-popup">
-                  <strong>${job.title || `Job ${index + 1}`}</strong><br>
-                  ${job.company ? `Company: ${job.company}<br>` : ''}
-                  ${job.location ? `Location: ${job.location}<br>` : ''}
-                  ${job.salary ? `Salary: ${job.salary}<br>` : ''}
-                  ${job.job_type ? `Type: ${job.job_type}<br>` : ''}
-                  ${job.industry ? `Industry: ${job.industry}<br>` : ''}
-                  Latitude: ${job.lat}<br>
-                  Longitude: ${job.lng}
+                  <h3>${job.title || `Job ${index + 1}`}</h3>
+                  ${job.company ? `
+                    <div class="job-detail">
+                      <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" alt="Company" class="job-detail-icon">
+                      <p>${job.company}</p>
+                    </div>
+                  ` : ''}
+                  ${job.location ? `
+                    <div class="job-detail">
+                      <img src="https://cdn-icons-png.flaticon.com/512/484/484167.png" alt="Location" class="job-detail-icon">
+                      <p>${job.location}</p>
+                    </div>
+                  ` : ''}
+                  ${salaryRange ? `
+                    <div class="job-detail">
+                      <img src="https://cdn-icons-png.flaticon.com/512/2830/2830284.png" alt="Salary" class="job-detail-icon">
+                      <p>${salaryRange}</p>
+                    </div>
+                  ` : ''}
+                  ${job.job_type ? `
+                    <div class="job-detail">
+                      <img src="https://cdn-icons-png.flaticon.com/512/3281/3281289.png" alt="Job Type" class="job-detail-icon">
+                      <p>${job.job_type}</p>
+                    </div>
+                  ` : ''}
+                  ${job.industry ? `
+                    <div class="job-detail">
+                      <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" alt="Industry" class="job-detail-icon">
+                      <p>${job.industry}</p>
+                    </div>
+                  ` : ''}
+                  <button class="apply-now-btn" onclick="applyForJob(${job.id})">Apply Now</button>
                 </div>
               `;
               marker.bindPopup(popupContent);
+              
+              markerClusterGroup.addLayer(marker);
             } else {
               console.error(`Invalid job data at index ${index}:`, job);
             }
           });
+
+          map.addLayer(markerClusterGroup);
           
           if (jobCoordinates.length > 0) {
             const validCoordinates = jobCoordinates.filter(job => job && typeof job === 'object' && 'lat' in job && 'lng' in job);
             if (validCoordinates.length > 0) {
-              map.fitBounds(L.latLngBounds(validCoordinates.map(job => [job.lat, job.lng])));
+              const bounds = markerClusterGroup.getBounds().pad(0.1);  // Add some padding
+              map.fitBounds(bounds);
+              console.log('Map bounds updated');
             }
+          } else {
+            map.setView([20, 0], 3);  // Reset to default view if no jobs
           }
         }
 
@@ -214,7 +381,19 @@
             'Transportation': '🚆',
             'Travel': '✈️'
           };
-          return emojiMap[industry] || '🏢'; // Default emoji if industry not found
+          return emojiMap[industry] || '🏢';
+        }
+
+        function getSalaryRange(min, max) {
+          if (min && max) {
+            return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+          } else if (min) {
+            return `$${min.toLocaleString()}+`;
+          } else if (max) {
+            return `Up to $${max.toLocaleString()}`;
+          } else {
+            return 'Salary not specified';
+          }
         }
 
         function createCustomIcon(emoji) {
@@ -226,48 +405,22 @@
           });
         }
 
-        filterForm.addEventListener('input', function() {
+        filterForm.addEventListener('change', function(e) {
+          console.log('Filter changed:', e.target.name, e.target.value);
           const formData = new FormData(filterForm);
           const searchParams = new URLSearchParams(formData);
           fetchJobs(searchParams);
         });
 
-        // Initial load of all jobs
         fetchJobs(new URLSearchParams());
 
-        // Ensure map is visible
         initMap();
       });
+
+      function applyForJob(jobId) {
+        console.log(`Applying for job with ID: ${jobId}`);
+        alert(`Application submitted for job ID: ${jobId}`);
+      }
     <% end %>
-    <style>
-        .job-marker-icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 30px;
-            height: 30px;
-            background-color: white;
-            border-radius: 50%;
-            border: 2px solid #3498db;
-            font-size: 20px; /* Adjust size of emoji */
-        }
-        .job-marker {
-            line-height: 30px; /* Center emoji vertically */
-        }
-        .custom-popup .leaflet-popup-content-wrapper {
-            background-color: white;
-            color: #333;
-            border-radius: 8px;
-            padding: 1px;
-            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-        }
-        .custom-popup .leaflet-popup-content {
-            margin: 13px 19px;
-            line-height: 1.4;
-        }
-        .custom-popup .leaflet-popup-tip {
-            background: white;
-        }
-    </style>
 </body>
 </html>

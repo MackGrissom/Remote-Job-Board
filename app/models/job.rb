@@ -42,4 +42,8 @@ class Job < ApplicationRecord
 
     jobs
   end
+
+  belongs_to :user
+  has_many :job_applications
+  has_many :applicants, through: :job_applications, source: :user
 end

@@ -1,0 +1,31 @@
+<h1>My Job Applicants</h1>
+
+<% @jobs.each do |job| %>
+  <h2><%= job.title %></h2>
+  <% if job.job_applications.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Applicant</th>
+          <th>Applied On</th>
+          <th>Cover Letter</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% job.job_applications.each do |application| %>
+          <tr>
+            <td><%= application.user.email %></td>
+            <td><%= application.created_at.to_date %></td>
+            <td><%= truncate(application.cover_letter, length: 100) %></td>
+            <td>
+              <%= link_to "View Details", "#" %> <!-- Implement this later -->
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No applications yet.</p>
+  <% end %>
+<% end %>

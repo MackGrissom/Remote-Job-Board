@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :jobs
+  resources :jobs do
+    collection do
+      post 'create_payment_intent'
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -9,13 +13,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root 'jobs#index'
 end
 
-
-Rails.application.routes.draw do
-  root to: 'jobs#index'  # Directs root URL to the Jobs controller, index action
-  resources :jobs  # Generates all the standard routes for jobs (index, show, new, edit, etc.)
-end
 
 

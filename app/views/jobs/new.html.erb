@@ -1,39 +1,99 @@
-<div class="container mx-auto py-12 px-6 lg:px-8">
-  <h1 class="text-3xl font-bold text-gray-900 mb-6">Post a Job</h1>
-
-  <%= form_with(model: @job, local: true, class: "space-y-6") do |form| %>
-    <div>
-      <%= form.label :title, "Job Title", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.text_field :title, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
+<div class="flex h-screen bg-gray-100">
+  <!-- Left side: Job Posting Form -->
+  <div class="w-1/2 p-8 bg-white shadow-lg overflow-y-auto">
+    <h1 class="text-2xl font-bold mb-6 text-indigo-700">Post a Remote Job</h1>
+    
+    <%= form_with(model: @job, local: true, class: "space-y-4") do |form| %>
+      <%= form.text_field :title, placeholder: "Job Title", class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      <%= form.text_field :company, placeholder: "Company Name", class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      <%= form.text_area :description, placeholder: "Job Description", rows: 3, class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      
+      <div class="flex space-x-2">
+        <%= form.select :job_type, ['Full-time', 'Part-time', 'Contract'], { prompt: "Job Type" }, class: "w-1/2 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+        <%= form.select :category, ['Programming', 'Design', 'Marketing', 'Other'], { prompt: "Category" }, class: "w-1/2 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      </div>
+      
+      <%= form.text_field :salary, placeholder: "Salary Range", class: "w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <h2 class="font-semibold mb-2 text-gray-700">Posting Options</h2>
+        <div class="space-y-2">
+          <div class="flex items-center">
+            <%= form.radio_button :posting_type, 'basic', class: "mr-2 h-4 w-4 text-indigo-600" %>
+            <%= form.label :posting_type_basic, "Basic - $299", class: "text-sm font-medium text-gray-700" %>
+          </div>
+          <div class="flex items-center">
+            <%= form.radio_button :posting_type, 'featured', class: "mr-2 h-4 w-4 text-indigo-600" %>
+            <%= form.label :posting_type_featured, "Featured - $499", class: "text-sm font-medium text-gray-700" %>
+          </div>
+        </div>
+      </div>
+      
+      <div id="stripe-payment-element" class="mt-4"></div>
+      
+      <%= form.submit "Post Job", class: "w-full bg-indigo-600 text-white p-2 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition duration-300", id: "submit-button" %>
+    <% end %>
+  </div>
+  
+  <!-- Right side: Information and Imagery -->
+  <div class="w-1/2 bg-indigo-700 text-white p-8 flex flex-col justify-between" style="background-image: url('https://images.unsplash.com/photo-1601436155198-2ebfea8117b0?q=80&w=2535&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-size: cover; background-position: center;">
+    <div class="bg-black bg-opacity-50 p-6 rounded-lg">
+      <h2 class="text-2xl font-bold mb-4">Why Post on Freely?</h2>
+      <ul class="space-y-2">
+        <li class="flex items-center">
+          <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span class="text-sm">Access to a large pool of remote talent</span>
+        </li>
+        <li class="flex items-center">
+          <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span class="text-sm">30-day listing visibility</span>
+        </li>
+        <li class="flex items-center">
+          <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span class="text-sm">Featured listings for increased exposure</span>
+        </li>
+        <li class="flex items-center">
+          <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span class="text-sm">Reach thousands of qualified candidates</span>
+        </li>
+      </ul>
+      <div class="bg-black bg-opacity-50 p-6 rounded-lg mt-10">
+      <h3 class="text-xl font-semibold mb-2">Need help?</h3>
+      <p class="text-sm">Contact our support team at <a href="mailto:support@example.com" class="text-green-400 hover:underline">support@example.com</a></p>
     </div>
-
-    <div>
-      <%= form.label :description, "Job Description", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.text_area :description, rows: 6, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
     </div>
-
-    <div>
-      <%= form.label :company, "Company Name", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.text_field :company, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
-    </div>
-
-    <div>
-      <%= form.label :location, "Location", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.text_field :location, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
-    </div>
-
-    <div>
-      <%= form.label :salary, "Salary", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.number_field :salary, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
-    </div>
-
-    <div>
-      <%= form.label :apply_link, "Application Link", class: "block text-sm font-medium text-gray-700" %>
-      <%= form.text_field :apply_link, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm" %>
-    </div>
-
-    <div>
-      <%= form.submit "Post Job", class: "bg-indigo-600 text-white px-6 py-3 rounded-md shadow hover:bg-indigo-700" %>
-    </div>
-  <% end %>
+    
+  </div>
 </div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  // Initialize Stripe and mount the payment element
+  const stripe = Stripe('<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>');
+  const elements = stripe.elements();
+  const paymentElement = elements.create('payment');
+  paymentElement.mount('#stripe-payment-element');
+
+  // Handle form submission
+  const form = document.querySelector('form');
+  const submitButton = document.getElementById('submit-button');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    submitButton.disabled = true;
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: '<%= jobs_url %>',
+      },
+    });
+
+    if (error) {
+      console.error(error);
+      submitButton.disabled = false;
+    } else {
+      form.submit();
+    }
+  });
+</script>

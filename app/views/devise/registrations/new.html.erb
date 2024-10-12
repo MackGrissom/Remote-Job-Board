@@ -13,66 +13,52 @@
     >
       <div class="max-w-xl lg:max-w-3xl">
         <h1 class="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-          Welcome to Freely 🛩
+          Welcome to Freely 
         </h1>
 
         <p class="mt-4 leading-relaxed text-gray-500">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam dolorum aliquam,
-          quibusdam aperiam voluptatum.
+          Discover a world of remote opportunities. We connect talented professionals with innovative companies, breaking down geographical barriers. Join Freely today and redefine your work-life balance.
         </p>
 
-        <%= form_with(model: resource, as: resource_name, url: registration_path(resource_name), local: true) do |f| %>
-          <div class="mt-8 grid grid-cols-6 gap-6">
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :first_name, class: "block text-sm font-medium text-gray-700" %>
-              <%= f.text_field :first_name, class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
-            </div>
+        <% if resource.errors.any? %>
+          <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <h2 class="text-lg font-semibold mb-2">
+              <%= pluralize(resource.errors.count, "error") %> prohibited sign up:
+            </h2>
+            <ul class="list-disc list-inside">
+              <% resource.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :last_name, class: "block text-sm font-medium text-gray-700" %>
-              <%= f.text_field :last_name, class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
-            </div>
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 grid grid-cols-6 gap-6", data: { turbo: false } }) do |f| %>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
+          </div>
 
-            <div class="col-span-6">
-              <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-              <%= f.email_field :email, class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
-            </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.password_field :password, autocomplete: "new-password", class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
+            <% if @minimum_password_length %>
+              <p class="mt-1 text-sm text-gray-500"><%= @minimum_password_length %> characters minimum</p>
+            <% end %>
+          </div>
 
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
-              <%= f.password_field :password, class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
-            </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
+          </div>
 
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
-              <%= f.password_field :password_confirmation, class: "mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm" %>
-            </div>
+          <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
+            <%= f.submit "Sign up", class: "inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500" %>
 
-            <div class="col-span-6">
-              <label for="MarketingAccept" class="flex gap-4">
-                <%= check_box_tag "marketing_accept", "1", false, id: "MarketingAccept", class: "size-5 rounded-md border-gray-200 bg-white shadow-sm" %>
-                <span class="text-sm text-gray-700">
-                  I want to receive emails about events, product updates and company announcements.
-                </span>
-              </label>
-            </div>
-
-            <div class="col-span-6">
-              <p class="text-sm text-gray-500">
-                By creating an account, you agree to our
-                <a href="#" class="text-gray-700 underline"> terms and conditions </a>
-                and
-                <a href="#" class="text-gray-700 underline">privacy policy</a>.
-              </p>
-            </div>
-
-            <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-              <%= f.submit "Create an account", class: "inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500" %>
-              <p class="mt-4 text-sm text-gray-500 sm:mt-0">
-                Already have an account?
-                <a href="#" class="text-gray-700 underline">Log in</a>.
-              </p>
-            </div>
+            <p class="mt-4 text-sm text-gray-500 sm:mt-0">
+              Already have an account?
+              <%= link_to "Log in", new_session_path(resource_name), class: "text-gray-700 underline" %>.
+            </p>
           </div>
         <% end %>
       </div>

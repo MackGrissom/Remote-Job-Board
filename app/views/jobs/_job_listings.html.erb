@@ -23,6 +23,7 @@
     <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
       <span class="text-sm text-gray-600"><%= time_ago_in_words(job.created_at) %> ago</span>
       <a href="<%= job_path(job) %>" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-block transition duration-150 ease-in-out">View Details</a>
+     <a href="<%= job_path(job, apply: true) %>" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded inline-block transition duration-150 ease-in-out">Apply Now</a>
     </div>
   </div>
 <% end %>

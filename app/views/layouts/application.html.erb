@@ -43,36 +43,7 @@
 </head>
 
 <body class="flex flex-col h-screen bg-gray-50">
-  <header class="bg-white shadow-md">
-    <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center py-4">
-        <h1 class="text-2xl font-bold text-blue-600">Freely</h1>
-        
-        <nav class="hidden md:flex space-x-8">
-          <a href="#" class="text-gray-600 hover:text-blue-600 transition duration-150">Jobs</a>
-          <a href="#" class="text-gray-600 hover:text-blue-600 transition duration-150">Companies</a>
-          <a href="#" class="text-gray-600 hover:text-blue-600 transition duration-150">Resources</a>
-        </nav>
-        
-        <div class="flex-1 max-w-xl mx-8">
-          <div class="flex rounded-lg overflow-hidden shadow-md">
-            <input type="text" placeholder="Search jobs..." class="w-full px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300" />
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 transition duration-150">Search</button>
-          </div>
-        </div>
-        <div class="flex items-center space-x-4">
-          <a href="/signin" class="text-gray-600 hover:text-blue-600 transition duration-150">Sign In</a>
-          <a href="/signup" class="bg-blue-600 text-white hover:bg-blue-700 font-semibold py-2 px-4 rounded-lg transition duration-150">Sign Up</a>
-          <a href="/jobs/new" class="bg-green-500 text-white hover:bg-green-600 font-semibold py-2 px-4 rounded-lg transition duration-150">
-            Post a Job
-          </a>
-        </div>
-      </div>
-    </div>
-  </header>
-
- 
-
+  <%= render 'shared/header' %>
 
   <main class="flex-1 overflow-hidden">
     <%= yield %>

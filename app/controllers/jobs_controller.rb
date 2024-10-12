@@ -1,33 +1,16 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: %i[ show destroy ]
+  # If you want to allow non-authenticated users to view the index, uncomment the next line
+  # skip_before_action :authenticate_user!, only: [:index]
 
   # GET /jobs or /jobs.json
   def index
     @jobs = Job.all
-    
     respond_to do |format|
       format.html
-      format.json {
-        job_coordinates = @jobs.map do |job|
-          {
-            id: job.id,
-            lat: job.latitude,
-            lng: job.longitude,
-            title: job.title,
-            company: job.company,
-            location: job.location,
-            salary_min: job.salary_min,
-            salary_max: job.salary_max,
-            job_type: job.job_type,
-            industry: job.industry,
-            description: job.description,
-            requirements: job.experience_level, # Assuming this is what you want for requirements
-            apply_link: job.apply_link
-          }
-        end
-        render json: {
+      format.json { 
+        render json: { 
           job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
-          job_coordinates: job_coordinates
+          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, location: job.location, salary_min: job.salary_min, salary_max: job.salary_max, job_type: job.job_type, industry: job.industry, id: job.id } }
         }
       }
     end
@@ -48,7 +31,8 @@ class JobsController < ApplicationController
 
     respond_to do |format|
       if @job.save
-        format.html { redirect_to @job, notice: "Job was successfully created." }
+        # Process successful payment and job creation
+        format.html { redirect_to @job, notice: 'Job was successfully posted.' }
         format.json { render :show, status: :created, location: @job }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -76,6 +60,16 @@ class JobsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def job_params
       params.require(:job).permit(:title, :description, :company, :location, :job_type, :salary, :apply_link, :latitude, :longitude, :experience_level, :industry)
+    end
+
+    def create_payment_intent
+      amount = params[:posting_type] == 'featured' ? 49900 : 29900 # Amount in cents
+      payment_intent = Stripe::PaymentIntent.create(
+        amount: amount,
+        currency: 'usd',
+        automatic_payment_methods: { enabled: true }
+      )
+      render json: { clientSecret: payment_intent.client_secret }
     end
 end
 

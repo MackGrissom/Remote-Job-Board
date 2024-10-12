@@ -1,0 +1,24 @@
+<header class="bg-white shadow-md">
+  <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center">
+        <%= link_to "Freely", root_path, class: "text-2xl font-bold text-blue-600" %>
+      </div>
+      
+
+      
+      <div class="flex items-center space-x-4">
+        <% if user_signed_in? %>
+          <span class="mr-4 text-gray-700">Welcome, <%= current_user.email.split('@').first %></span>
+          <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150" %>
+        <% else %>
+          <%= link_to "Sign In", new_user_session_path, class: "text-gray-600 hover:text-blue-600 transition duration-150" %>
+          <%= link_to "Sign Up", new_user_registration_path, class: "bg-blue-600 text-white hover:bg-blue-700 font-semibold py-2 px-4 rounded-lg transition duration-150" %>
+        <% end %>
+        <a href="/jobs/new" class="bg-green-500 text-white hover:bg-green-600 font-semibold py-2 px-4 rounded-lg transition duration-150">
+          Post a Job
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
