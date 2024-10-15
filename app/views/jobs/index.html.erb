@@ -148,6 +148,13 @@
                 <% end %>
             </div>
             <div id="job-listings" class="flex-1 overflow-y-auto p-6 space-y-6">
+                <% @jobs.each do |job| %>
+                  <div>
+                    <h2><%= job.title %></h2>
+                    <p><%= job.company %></p>
+                    <%= link_to "See Details", job_path(job) %>
+                  </div>
+                <% end %>
             </div>
         </div>
         <div class="w-1/2 h-full">

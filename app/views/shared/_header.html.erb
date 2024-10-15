@@ -3,13 +3,14 @@
     <div class="flex justify-between items-center py-4">
       <div class="flex items-center">
         <%= link_to "Freely", root_path, class: "text-2xl font-bold text-blue-600" %>
+        <span class="text-gray-600 ml-2">Work Freely, Hire Globally</span>
       </div>
       
 
       
       <div class="flex items-center space-x-4">
         <% if user_signed_in? %>
-          <span class="mr-4 text-gray-700">Welcome, <%= current_user.email.split('@').first %></span>
+          <span class="mr-4 text-gray-700">Welcome, <%= current_user.try(:first_name) || current_user.email.split('@').first %></span>
           <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150" %>
         <% else %>
           <%= link_to "Sign In", new_user_session_path, class: "text-gray-600 hover:text-blue-600 transition duration-150" %>

@@ -86,3 +86,7 @@ end
 gem 'kaminari'
 gem 'faker'
 gem 'geocoder'
+
+gem 'stripe'
+
+gem 'dotenv-rails', groups: [:development, :test]

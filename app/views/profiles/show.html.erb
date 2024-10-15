@@ -1,0 +1,19 @@
+<div>
+  <h1 class="font-bold text-4xl">Profiles#show</h1>
+  <p>Find me in app/views/profiles/show.html.erb</p>
+</div>
+
+<h1>Your Profile</h1>
+
+<% if @profile.persisted? %>
+  <p><strong>Name:</strong> <%= @profile.first_name %> <%= @profile.last_name %></p>
+  <p><strong>Bio:</strong> <%= @profile.bio %></p>
+  <p><strong>Skills:</strong> <%= @profile.skills %></p>
+  <p><strong>Experience:</strong> <%= @profile.experience %></p>
+  <p><strong>Education:</strong> <%= @profile.education %></p>
+
+  <%= link_to 'Edit Profile', edit_profile_path %>
+<% else %>
+  <p>You haven't created a profile yet.</p>
+  <%= link_to 'Create Profile', edit_profile_path %>
+<% end %>

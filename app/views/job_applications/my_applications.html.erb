@@ -1,0 +1,14 @@
+<h1>My Job Applications</h1>
+
+<% if @applications.present? %>
+  <% @applications.each do |application| %>
+    <div>
+      <h2><%= link_to application.job.title, job_path(application.job) %></h2>
+      <p>Company: <%= application.job.company %></p>
+      <p>Applied on: <%= application.created_at.strftime("%B %d, %Y") %></p>
+      <p>Status: <%= application.status || 'Pending' %></p>
+    </div>
+  <% end %>
+<% else %>
+  <p>You haven't applied to any jobs yet.</p>
+<% end %>

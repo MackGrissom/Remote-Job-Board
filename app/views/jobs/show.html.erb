@@ -22,4 +22,30 @@
 
   <%= link_to 'Apply Now', @job.apply_link, class: "inline-block px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-150", target: "_blank" %>
   <%= link_to 'Back to Jobs', jobs_path, class: "inline-block ml-4 px-6 py-3 text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition duration-150" %>
+
+  <% if current_user == @job.user && @applications.any? %>
+    <div class="mt-8">
+      <h2 class="text-2xl font-bold mb-4">Applications</h2>
+      <div class="space-y-4">
+        <% @applications.each do |application| %>
+          <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold"><%= application.full_name %></h3>
+            <p class="text-gray-600"><%= application.email %> • <%= application.phone %></p>
+            <p class="mt-2">
+              <%= link_to "LinkedIn Profile", application.linkedin_url, target: "_blank", class: "text-blue-600 hover:underline" %>
+            </p>
+            <% if application.resume.attached? %>
+              <p class="mt-2">
+                <%= link_to "View Resume", rails_blob_path(application.resume, disposition: "inline"), target: "_blank", class: "text-green-600 hover:underline" %>
+              </p>
+            <% end %>
+            <div class="mt-4">
+              <h4 class="font-semibold">Cover Letter:</h4>
+              <p class="text-gray-700"><%= application.cover_letter %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

@@ -1,0 +1,15 @@
+<h1>My Posted Jobs</h1>
+
+<% if @jobs.present? %>
+  <% @jobs.each do |job| %>
+    <div>
+      <h2><%= link_to job.title, job_path(job) %></h2>
+      <p>Company: <%= job.company %></p>
+      <p>Location: <%= job.location %></p>
+      <p>Applications: <%= job.job_applications.count %></p>
+      <%= link_to "View Applications", job_job_applications_path(job) %>
+    </div>
+  <% end %>
+<% else %>
+  <p>You haven't posted any jobs yet.</p>
+<% end %>

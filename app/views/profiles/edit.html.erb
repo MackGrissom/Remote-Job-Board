@@ -1,0 +1,51 @@
+<div>
+  <h1 class="font-bold text-4xl">Profiles#edit</h1>
+  <p>Find me in app/views/profiles/edit.html.erb</p>
+</div>
+
+<h1><%= @profile.persisted? ? 'Edit' : 'Create' %> Your Profile</h1>
+
+<%= form_with(model: @profile, local: true) do |form| %>
+  <% if @profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
+      <ul>
+        <% @profile.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div>
+    <%= form.label :bio %>
+    <%= form.text_area :bio %>
+  </div>
+
+  <div>
+    <%= form.label :skills %>
+    <%= form.text_area :skills %>
+  </div>
+
+  <div>
+    <%= form.label :experience %>
+    <%= form.text_area :experience %>
+  </div>
+
+  <div>
+    <%= form.label :education %>
+    <%= form.text_area :education %>
+  </div>
+
+  <%= form.submit %>
+<% end %>

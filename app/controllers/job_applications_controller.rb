@@ -6,14 +6,23 @@ class JobApplicationsController < ApplicationController
     @job_application = @job.job_applications.build
   end
 
+  def my_applications
+    @applications = current_user.job_applications.includes(:job)
+  end
+
+  def index
+    @applications = @job.job_applications
+  end
+
   def create
-    @job_application = @job.job_applications.build(job_application_params)
+    @job = Job.find(params[:job_id])
+    @job_application = @job.job_applications.new(job_application_params)
     @job_application.user = current_user
 
     if @job_application.save
-      render json: { message: 'Application submitted successfully' }, status: :created
+      redirect_to @job, notice: 'Application submitted successfully.'
     else
-      render json: { errors: @job_application.errors.full_messages }, status: :unprocessable_entity
+      render :new
     end
   end
 
@@ -24,6 +33,6 @@ class JobApplicationsController < ApplicationController
   end
 
   def job_application_params
-    params.require(:job_application).permit(:cover_letter)
+    params.require(:job_application).permit(:full_name, :email, :phone, :linkedin_url, :resume, :cover_letter)
   end
 end
