@@ -3,39 +3,28 @@ require 'stripe'
 class JobsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   
+  helper_method :industries
+
   # GET /jobs or /jobs.json
   def index
     @jobs = Job.all
 
-    if params[:location].present? && params[:location] != 'All Locations'
-      @jobs = filter_by_continent(@jobs, params[:location])
+    if params[:industry].present?
+      @jobs = @jobs.where(industry: params[:industry])
     end
 
-    @jobs = @jobs.where(industry: params[:industry]) if params[:industry].present? && params[:industry] != 'All Industries'
-
-    job_types = []
-    job_types << 'Full-time' if params[:job_type_full_time] == '1'
-    job_types << 'Part-time' if params[:job_type_part_time] == '1'
-    job_types << 'Contract' if params[:job_type_contract] == '1'
-    @jobs = @jobs.where(job_type: job_types) if job_types.any?
-
-    case params[:salary_range]
-    when '0-50000'
-      @jobs = @jobs.where('salary_min <= ? OR salary_max <= ?', 50000, 50000)
-    when '50001-100000'
-      @jobs = @jobs.where('(salary_min BETWEEN ? AND ?) OR (salary_max BETWEEN ? AND ?)', 50001, 100000, 50001, 100000)
-    when '100001+'
-      @jobs = @jobs.where('salary_min >= ? OR salary_max >= ?', 100001, 100001)
+    if params[:location].present?
+      @jobs = @jobs.where(location: params[:location])
     end
 
     respond_to do |format|
       format.html
-      format.json do
+      format.json {
         render json: {
           job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
-          job_coordinates: @jobs.map { |job| { id: job.id, lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, location: job.location, salary_min: job.salary_min, salary_max: job.salary_max, job_type: job.job_type, industry: job.industry, apply_link: job.apply_link } }
+          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, industry: job.industry } }
         }
-      end
+      }
     end
   end
 
@@ -145,5 +134,25 @@ class JobsController < ApplicationController
 
     def job_posting_price
       params[:posting_type] == 'featured' ? 49900 : 29900
+    end
+
+    def industries
+      {
+        'Accounting': '📊', 'Advertising': '📢', 'Aerospace': '✈️',
+        'Agriculture': '🌾', 'Automotive': '🚗', 'Banking': '🏦',
+        'Biotechnology': '🧬', 'Broadcasting': '📺', 'Business Services': '💼',
+        'Chemicals': '⚗️', 'Communications': '📡', 'Construction': '🏗️',
+        'Consulting': '🗣️', 'Consumer Products': '🛍️', 'Education': '🎓',
+        'Electronics': '🔌', 'Energy': '⚡', 'Engineering': '🛠️',
+        'Entertainment': '🎬', 'Environmental': '🌿', 'Fashion': '👗',
+        'Finance': '💰', 'Food and Beverage': '🍽️', 'Government': '🏛️',
+        'Healthcare': '🏥', 'Hospitality': '🏨', 'Insurance': '🛡️',
+        'Legal': '⚖️', 'Logistics': '🚚', 'Manufacturing': '🏭',
+        'Marketing': '📈', 'Media': '📰', 'Mining': '⛏️',
+        'Non-Profit': '🤝', 'Pharmaceuticals': '💊', 'Public Relations': '🗞️',
+        'Publishing': '📚', 'Real Estate': '🏠', 'Retail': '🛒',
+        'Software': '💻', 'Sports': '⚽', 'Technology': '🔧',
+        'Telecommunications': '📞', 'Transportation': '🚆', 'Travel': '✈️'
+      }
     end
 end

@@ -25,7 +25,7 @@
             height: 30px;
             background-color: white;
             border-radius: 50%;
-            border: 2px solid #3498db;
+            border: 2px solid #ff9800; /* Changed to orange */
             font-size: 20px;
             position: relative;
         }
@@ -38,6 +38,7 @@
             border-radius: 8px;
             padding: 1px;
             box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+            border-left: 5px solid #ff9800; /* Added orange accent */
         }
         .custom-popup .leaflet-popup-content {
             margin: 13px 19px;
@@ -47,7 +48,7 @@
             background: white;
         }
         .apply-now-btn {
-            background-color: #4CAF50;
+            background-color: #ff9800; /* Changed to orange */
             border: none;
             color: white;
             padding: 10px 20px;
@@ -61,7 +62,7 @@
             transition: background-color 0.3s;
         }
         .apply-now-btn:hover {
-            background-color: #45a049;
+            background-color: #f57c00; /* Darker shade of orange for hover */
         }
         .job-tooltip {
             visibility: hidden;
@@ -91,7 +92,7 @@
         .custom-popup h3 {
             font-size: 18px;
             margin: 0 0 10px;
-            color: #2c3e50;
+            color: #ff9800; /* Changed to orange */
         }
         .custom-popup p {
             margin: 5px 0;
@@ -125,6 +126,220 @@
         .apply-now-btn:hover {
             background-color: #2980b9;
         }
+        /* Update your existing styles */
+        .industry-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+
+        .industry-button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .industry-filter-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .industry-filter-btn:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .industry-filter-btn.selected {
+            background-color: #fff5e6;
+            border-color: #ff9800;
+        }
+
+        .industry-filter-btn .emoji {
+            font-size: 1.5rem;
+        }
+
+        .industry-filter-btn:hover::after {
+            content: attr(title);
+        }
+
+        .industry-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .industry-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .industry-scroll-container::-webkit-scrollbar-thumb {
+            background-color: #ff9800;
+            border-radius: 3px;
+        }
+
+        .industry-button-container {
+            padding-bottom: 10px;
+        }
+
+        .industry-filter-btn {
+            width: 60px;
+            height: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .industry-filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .industry-filter-btn.selected {
+            background-color: #fff5e6;
+            border-color: #ff9800;
+        }
+
+        .text-xxs {
+            font-size: 0.625rem;
+        }
+
+        /* Add smooth scrolling behavior */
+        .industry-scroll-container {
+            scroll-behavior: smooth;
+        }
+
+        /* Add scroll indicators */
+        .industry-scroll-wrapper {
+            position: relative;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 152, 0, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .scroll-left {
+            left: 5px;
+        }
+
+        .scroll-right {
+            right: 5px;
+        }
+
+        .industry-filter-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+            max-height: 150px; /* Reduced height */
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .industry-filter-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            padding: 0.5rem 0.75rem; /* Reduced padding */
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem; /* Slightly reduced border radius */
+            transition: all 0.2s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .industry-filter-btn:hover, .industry-filter-btn:focus {
+            background-color: #fff;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .industry-filter-btn.selected {
+            background-color: #fff5e6;
+            border-color: #ff9800;
+        }
+
+        .industry-filter-btn .emoji {
+            font-size: 1.25rem; /* Slightly reduced emoji size */
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .industry-filter-btn .industry-name {
+            font-size: 0.75rem; /* Reduced font size */
+            font-weight: 500;
+            color: #374151;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .industry-filter-container::-webkit-scrollbar {
+            width: 4px; /* Reduced scrollbar width */
+        }
+
+        .industry-filter-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
+        }
+
+        .industry-filter-container::-webkit-scrollbar-thumb {
+            background-color: #ff9800;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .industry-filter-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        /* Custom styles for marker clusters */
+        .marker-cluster-small,
+        .marker-cluster-medium,
+        .marker-cluster-large {
+            background-color: rgba(255, 152, 0, 0.6);
+        }
+        .marker-cluster-small div,
+        .marker-cluster-medium div,
+        .marker-cluster-large div {
+            background-color: rgba(255, 152, 0, 0.8);
+        }
+        .marker-cluster {
+            background-clip: padding-box;
+            border-radius: 20px;
+        }
+        .marker-cluster div {
+            width: 30px;
+            height: 30px;
+            margin-left: 5px;
+            margin-top: 5px;
+            text-align: center;
+            border-radius: 15px;
+            font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+            color: #fff;
+        }
+        .marker-cluster span {
+            line-height: 30px;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen bg-gray-100">
@@ -133,7 +348,7 @@
         <div class="w-1/2 flex flex-col bg-white shadow-lg">
             <div class="p-6 bg-gray-50 border-b border-gray-200">
                 <% if user_signed_in? %>
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Work <span class="text-blue-600">Freely</span>, Hire <span class="text-blue-600">Globally</span></h2>
+                   
                 <% end %>
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">Job Filters</h2>
                 <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
@@ -142,8 +357,15 @@
                         <%= f.select :location, ['North America', 'South America', 'Europe', 'Asia', 'Africa', 'Australia'], { include_blank: 'All Locations' }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
                     </div>
                     <div>
-                        <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700" %>
-                        <%= f.select :industry, ['Accounting', 'Advertising', 'Aerospace', 'Agriculture', 'Automotive', 'Banking', 'Biotechnology', 'Broadcasting', 'Business Services', 'Chemicals', 'Communications', 'Construction', 'Consulting', 'Consumer Products', 'Education', 'Electronics', 'Energy', 'Engineering', 'Entertainment', 'Environmental', 'Fashion', 'Finance', 'Food and Beverage', 'Government', 'Healthcare', 'Hospitality', 'Insurance', 'Legal', 'Logistics', 'Manufacturing', 'Marketing', 'Media', 'Mining', 'Non-Profit', 'Pharmaceuticals', 'Public Relations', 'Publishing', 'Real Estate', 'Retail', 'Software', 'Sports', 'Technology', 'Telecommunications', 'Transportation', 'Travel'], { include_blank: 'All Industries' }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+                        <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                        <%= f.select :industry, 
+                          options_for_select(
+                            industries.map { |industry, emoji| ["#{emoji} #{industry}", industry] },
+                            params[:industry]
+                          ),
+                          { include_blank: "All Industries" },
+                          { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" }
+                        %>
                     </div>
                 <% end %>
             </div>
@@ -192,6 +414,26 @@
 
           console.log('Map initialized:', map);
           applyMapStyle('Default');
+
+          markerClusterGroup = L.markerClusterGroup({
+            maxClusterRadius: 80,
+            iconCreateFunction: function(cluster) {
+              var childCount = cluster.getChildCount();
+              var c = ' marker-cluster-';
+              if (childCount < 10) {
+                c += 'small';
+              } else if (childCount < 100) {
+                c += 'medium';
+              } else {
+                c += 'large';
+              }
+              return new L.DivIcon({
+                html: '<div><span>' + childCount + '</span></div>',
+                className: 'marker-cluster' + c,
+                iconSize: new L.Point(40, 40)
+              });
+            }
+          });
         }
 
         function applyMapStyle(style) {
@@ -200,7 +442,7 @@
             'Default': 'grayscale(70%) invert(100%) contrast(90%) hue-rotate(180deg) saturate(80%) brightness(110%)',
             'Night Mode': 'invert(100%) hue-rotate(180deg) brightness(90%) contrast(90%)',
             'Sepia': 'sepia(100%) saturate(80%) brightness(80%)',
-            'Cool Blue': 'hue-rotate(180deg) saturate(50%) brightness(100%)'
+            'Cool Orange': 'hue-rotate(20deg) saturate(150%) brightness(100%)' // Changed to an orange-tinted style
           };
           if (map && map.getContainer()) {
             const mapPane = map.getPane('tilePane');
@@ -265,9 +507,9 @@
               const customIcon = L.divIcon({
                 className: '',
                 html: `
-                  <div class="job-marker-icon">
+                  <div class="job-marker-icon" style="background-color: #fff5e6; border-color: #ff9800;">
                     <span class="job-marker">${emoji}</span>
-                    <span class="job-tooltip">
+                    <span class="job-tooltip" style="background-color: #ff9800; color: white;">
                       <strong>${job.title || `Job ${index + 1}`}</strong><br>
                       ${job.company || ''}<br>
                       ${job.location || ''}<br>
@@ -368,7 +610,7 @@
             'Government': '🏛️',
             'Healthcare': '🏥',
             'Hospitality': '🏨',
-            'Insurance': '️',
+            'Insurance': '🛡️',
             'Legal': '⚖️',
             'Logistics': '🚚',
             'Manufacturing': '🏭',
@@ -405,7 +647,7 @@
 
         function createCustomIcon(emoji) {
           return L.divIcon({
-            html: `<div class="job-marker-icon"><span class="job-marker">${emoji}</span></div>`,
+            html: `<div class="job-marker-icon" style="background-color: #ff9800; color: white;"><span class="job-marker">${emoji}</span></div>`,
             className: '',
             iconSize: [30, 30],
             iconAnchor: [15, 15]
@@ -428,6 +670,67 @@
         console.log(`Applying for job with ID: ${jobId}`);
         alert(`Application submitted for job ID: ${jobId}`);
       }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const scrollContainer = document.querySelector('.industry-scroll-container');
+        const scrollContent = document.querySelector('.industry-button-container');
+        
+        // Add scroll indicators
+        const scrollWrapper = document.createElement('div');
+        scrollWrapper.className = 'industry-scroll-wrapper';
+        scrollContainer.parentNode.insertBefore(scrollWrapper, scrollContainer);
+        scrollWrapper.appendChild(scrollContainer);
+
+        const leftIndicator = document.createElement('div');
+        leftIndicator.className = 'scroll-indicator scroll-left';
+        leftIndicator.innerHTML = '◀';
+        scrollWrapper.appendChild(leftIndicator);
+
+        const rightIndicator = document.createElement('div');
+        rightIndicator.className = 'scroll-indicator scroll-right';
+        rightIndicator.innerHTML = '▶';
+        scrollWrapper.appendChild(rightIndicator);
+
+        // Scroll functions
+        leftIndicator.addEventListener('click', () => {
+          scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+
+        rightIndicator.addEventListener('click', () => {
+          scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        // Show/hide indicators based on scroll position
+        function updateIndicators() {
+          leftIndicator.style.display = scrollContainer.scrollLeft > 0 ? 'flex' : 'none';
+          rightIndicator.style.display = 
+            scrollContainer.scrollLeft < scrollContent.offsetWidth - scrollContainer.offsetWidth ? 'flex' : 'none';
+        }
+
+        scrollContainer.addEventListener('scroll', updateIndicators);
+        window.addEventListener('resize', updateIndicators);
+        updateIndicators();
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const locationButtons = document.querySelectorAll('.location-filter-btn');
+        const locationFilterInput = document.getElementById('location-filter');
+
+        locationButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            locationButtons.forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+            locationFilterInput.value = this.dataset.location;
+            updateFilters();
+          });
+        });
+
+        function updateFilters() {
+          const formData = new FormData(document.getElementById('job-filter-form'));
+          const searchParams = new URLSearchParams(formData);
+          fetchJobs(searchParams);
+        }
+      });
     <% end %>
 </body>
 </html>
