@@ -39,17 +39,31 @@
     .filter-button.active {
       @apply bg-blue-100;
     }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+      overflow: hidden;
+    }
   </style>
 </head>
 
 <body class="flex flex-col h-screen bg-gray-50">
   <%= render 'shared/header' %>
 
-  <main class="flex-1 overflow-hidden">
+  <main>
     <%= yield %>
   </main>
 
-  <%= render 'layouts/footer' %>
+  <!-- Remove the footer from here -->
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {

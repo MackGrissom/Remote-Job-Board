@@ -23,11 +23,12 @@
             align-items: center;
             width: 30px;
             height: 30px;
-            background-color: white;
+            background-color: #ff9800;
             border-radius: 50%;
-            border: 2px solid #ff9800; /* Changed to orange */
+            border: 2px solid #ffffff;
             font-size: 20px;
             position: relative;
+            color: white;
         }
         .job-marker {
             line-height: 30px;
@@ -38,7 +39,7 @@
             border-radius: 8px;
             padding: 1px;
             box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-            border-left: 5px solid #ff9800; /* Added orange accent */
+            border-left: 5px solid #ff9800;
         }
         .custom-popup .leaflet-popup-content {
             margin: 13px 19px;
@@ -48,7 +49,7 @@
             background: white;
         }
         .apply-now-btn {
-            background-color: #ff9800; /* Changed to orange */
+            background-color: #ff9800;
             border: none;
             color: white;
             padding: 10px 20px;
@@ -62,7 +63,7 @@
             transition: background-color 0.3s;
         }
         .apply-now-btn:hover {
-            background-color: #f57c00; /* Darker shade of orange for hover */
+            background-color: #f57c00;
         }
         .job-tooltip {
             visibility: hidden;
@@ -92,7 +93,7 @@
         .custom-popup h3 {
             font-size: 18px;
             margin: 0 0 10px;
-            color: #ff9800; /* Changed to orange */
+            color: #ff9800;
         }
         .custom-popup p {
             margin: 5px 0;
@@ -109,210 +110,26 @@
             margin-right: 10px;
             opacity: 0.7;
         }
-        .apply-now-btn {
-            background-color: #3498db;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .apply-now-btn:hover {
-            background-color: #2980b9;
-        }
-        /* Update your existing styles */
-        .industry-scroll-container {
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 10px 0;
-            margin-bottom: 10px;
-        }
-
-        .industry-button-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .industry-filter-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #f3f4f6;
-            border: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .industry-filter-btn:hover {
-            background-color: #e5e7eb;
-            transform: translateY(-2px);
-        }
-
-        .industry-filter-btn.selected {
-            background-color: #fff5e6;
-            border-color: #ff9800;
-        }
-
-        .industry-filter-btn .emoji {
-            font-size: 1.5rem;
-        }
-
-        .industry-filter-btn:hover::after {
-            content: attr(title);
-        }
-
-        .industry-scroll-container::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .industry-scroll-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        .industry-scroll-container::-webkit-scrollbar-thumb {
-            background-color: #ff9800;
-            border-radius: 3px;
-        }
-
-        .industry-button-container {
-            padding-bottom: 10px;
-        }
-
-        .industry-filter-btn {
-            width: 60px;
-            height: 60px;
-            transition: all 0.3s ease;
-        }
-
-        .industry-filter-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .industry-filter-btn.selected {
-            background-color: #fff5e6;
-            border-color: #ff9800;
-        }
-
-        .text-xxs {
-            font-size: 0.625rem;
-        }
-
-        /* Add smooth scrolling behavior */
-        .industry-scroll-container {
-            scroll-behavior: smooth;
-        }
-
-        /* Add scroll indicators */
-        .industry-scroll-wrapper {
-            position: relative;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
-            background-color: rgba(255, 152, 0, 0.8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .scroll-left {
-            left: 5px;
-        }
-
-        .scroll-right {
-            right: 5px;
-        }
-
-        .industry-filter-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 0.5rem;
-            max-height: 150px; /* Reduced height */
-            overflow-y: auto;
-            padding-right: 0.5rem;
-        }
-
-        .industry-filter-btn {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-            padding: 0.5rem 0.75rem; /* Reduced padding */
-            background-color: #f3f4f6;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.375rem; /* Slightly reduced border radius */
-            transition: all 0.2s ease;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .industry-filter-btn:hover, .industry-filter-btn:focus {
-            background-color: #fff;
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transform: translateY(-1px);
-        }
-
-        .industry-filter-btn.selected {
-            background-color: #fff5e6;
-            border-color: #ff9800;
-        }
-
-        .industry-filter-btn .emoji {
-            font-size: 1.25rem; /* Slightly reduced emoji size */
-            margin-right: 0.5rem;
-            flex-shrink: 0;
-        }
-
-        .industry-filter-btn .industry-name {
-            font-size: 0.75rem; /* Reduced font size */
-            font-weight: 500;
-            color: #374151;
+        .location-filter-btn {
+            flex: 1 0 auto;
+            min-width: 120px;
+            max-width: 200px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        .industry-filter-container::-webkit-scrollbar {
-            width: 4px; /* Reduced scrollbar width */
-        }
-
-        .industry-filter-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 2px;
-        }
-
-        .industry-filter-container::-webkit-scrollbar-thumb {
-            background-color: #ff9800;
-            border-radius: 2px;
-        }
-
         @media (max-width: 640px) {
-            .industry-filter-container {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            .location-filter-btn {
+                min-width: 100px;
+                font-size: 0.75rem;
             }
         }
-
-        /* Custom styles for marker clusters */
+        @media (max-width: 480px) {
+            .location-filter-btn {
+                min-width: 80px;
+                font-size: 0.7rem;
+            }
+        }
         .marker-cluster-small,
         .marker-cluster-medium,
         .marker-cluster-large {
@@ -343,44 +160,60 @@
     </style>
 </head>
 <body class="flex flex-col h-screen bg-gray-100">
-    
     <div class="flex h-full">
-        <div class="w-1/2 flex flex-col bg-white shadow-lg">
-            <div class="p-6 bg-gray-50 border-b border-gray-200">
-                <% if user_signed_in? %>
-                   
-                <% end %>
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">Job Filters</h2>
-                <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
-                    <div>
-                        <%= f.label :location, "Location", class: "block text-sm font-medium text-gray-700" %>
-                        <%= f.select :location, ['North America', 'South America', 'Europe', 'Asia', 'Africa', 'Australia'], { include_blank: 'All Locations' }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
-                    </div>
-                    <div>
-                        <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700 mb-2" %>
-                        <%= f.select :industry, 
-                          options_for_select(
-                            industries.map { |industry, emoji| ["#{emoji} #{industry}", industry] },
-                            params[:industry]
-                          ),
-                          { include_blank: "All Industries" },
-                          { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" }
-                        %>
-                    </div>
-                <% end %>
-            </div>
-            <div id="job-listings" class="flex-1 overflow-y-auto p-6 space-y-6">
-                <% @jobs.each do |job| %>
-                  <div>
-                    <h2><%= job.title %></h2>
-                    <p><%= job.company %></p>
-                    <%= link_to "See Details", job_path(job) %>
-                  </div>
-                <% end %>
+        <div class="w-1/2 flex flex-col overflow-hidden">
+            <div class="flex-1 overflow-y-auto">
+                <div class="p-6 bg-gray-50 border-b border-gray-200">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Job Filters</h2>
+                    <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
+                        <div>
+                            <%= f.label :location, "Location", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" 
+                                        class="location-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                                        data-location="">
+                                    🌍 All Locations
+                                </button>
+                                <% [
+                                    ['🌎', 'North America'],
+                                    ['🌎', 'South America'],
+                                    ['🌍', 'Europe'],
+                                    ['🌏', 'Asia'],
+                                    ['🌍', 'Africa'],
+                                    ['🌏', 'Australia']
+                                ].each do |emoji, continent| %>
+                                    <button type="button" 
+                                            class="location-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                                            data-location="<%= continent %>">
+                                        <%= emoji %> <%= continent %>
+                                    </button>
+                                <% end %>
+                            </div>
+                            <%= f.hidden_field :location, id: 'location-filter' %>
+                        </div>
+                        <div>
+                            <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                            <%= f.select :industry, 
+                              options_for_select(
+                                industries.map { |industry, emoji| ["#{emoji} #{industry}", industry] },
+                                params[:industry]
+                              ),
+                              { include_blank: "All Industries" },
+                              { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" }
+                            %>
+                        </div>
+                    <% end %>
+                </div>
+                <div id="job-listings" class="p-6 space-y-6">
+                    <!-- Job listings will be dynamically inserted here -->
+                </div>
+                
+                <!-- Add the footer here -->
+                <%= render 'layouts/footer' %>
             </div>
         </div>
-        <div class="w-1/2 h-full">
-            <div id="map" class="w-full h-full"></div>
+        <div class="w-1/2 relative">
+            <div id="map" class="absolute inset-0"></div>
         </div>
     </div>
 
@@ -403,17 +236,16 @@
 
           map = L.map('map', {
             backgroundColor: '#ffffff',
-            minZoom: 2,  // Add this line to set a minimum zoom level
-            maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180))  // Add this line to restrict panning
-          }).setView([20, 0], 3);  // Adjust the initial center and zoom level
+            minZoom: 2,
+            maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180))
+          }).setView([20, 0], 3);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
             backgroundColor: '#ffffff',
-            noWrap: true  // Add this line to prevent tile repetition
+            noWrap: true
           }).addTo(map);
 
           console.log('Map initialized:', map);
-          applyMapStyle('Default');
 
           markerClusterGroup = L.markerClusterGroup({
             maxClusterRadius: 80,
@@ -436,24 +268,33 @@
           });
         }
 
-        function applyMapStyle(style) {
-          console.log('Applying map style:', style);
-          const styles = {
-            'Default': 'grayscale(70%) invert(100%) contrast(90%) hue-rotate(180deg) saturate(80%) brightness(110%)',
-            'Night Mode': 'invert(100%) hue-rotate(180deg) brightness(90%) contrast(90%)',
-            'Sepia': 'sepia(100%) saturate(80%) brightness(80%)',
-            'Cool Orange': 'hue-rotate(20deg) saturate(150%) brightness(100%)' // Changed to an orange-tinted style
+        function zoomToContinent(continent) {
+          const continentCoordinates = {
+            'North America': { lat: 40, lng: -100, zoom: 3 },
+            'South America': { lat: -15, lng: -60, zoom: 3 },
+            'Europe': { lat: 50, lng: 10, zoom: 4 },
+            'Asia': { lat: 30, lng: 100, zoom: 3 },
+            'Africa': { lat: 0, lng: 20, zoom: 3 },
+            'Australia': { lat: -25, lng: 135, zoom: 4 }
           };
-          if (map && map.getContainer()) {
-            const mapPane = map.getPane('tilePane');
-            if (mapPane) {
-              mapPane.style.filter = styles[style] || styles['Default'];
-            } else {
-              console.error('Map tile pane not available for styling');
-            }
+
+          if (continent && continentCoordinates[continent]) {
+            const coords = continentCoordinates[continent];
+            map.setView([coords.lat, coords.lng], coords.zoom);
           } else {
-            console.error('Map or map container not available for styling');
+            // Reset to world view
+            map.setView([20, 0], 2);
           }
+        }
+
+        function updateFilters() {
+          const formData = new FormData(filterForm);
+          const searchParams = new URLSearchParams(formData);
+          
+          const selectedLocation = formData.get('location');
+          zoomToContinent(selectedLocation);
+          
+          fetchJobs(searchParams);
         }
 
         function fetchJobs(searchParams) {
@@ -500,16 +341,15 @@
           markerClusterGroup = L.markerClusterGroup();
 
           jobCoordinates.forEach((job, index) => {
-            console.log(`Processing job ${index}:`, job);
             if (job && typeof job === 'object' && 'lat' in job && 'lng' in job) {
               const emoji = getEmojiForIndustry(job.industry);
               const salaryRange = getSalaryRange(job.salary_min, job.salary_max);
               const customIcon = L.divIcon({
                 className: '',
                 html: `
-                  <div class="job-marker-icon" style="background-color: #fff5e6; border-color: #ff9800;">
+                  <div class="job-marker-icon">
                     <span class="job-marker">${emoji}</span>
-                    <span class="job-tooltip" style="background-color: #ff9800; color: white;">
+                    <span class="job-tooltip">
                       <strong>${job.title || `Job ${index + 1}`}</strong><br>
                       ${job.company || ''}<br>
                       ${job.location || ''}<br>
@@ -522,7 +362,6 @@
               });
 
               const marker = L.marker([job.lat, job.lng], { icon: customIcon });
-              console.log(`Added marker for job ${index} at [${job.lat}, ${job.lng}]`);
               
               const popupContent = `
                 <div class="custom-popup">
@@ -569,17 +408,6 @@
           });
 
           map.addLayer(markerClusterGroup);
-          
-          if (jobCoordinates.length > 0) {
-            const validCoordinates = jobCoordinates.filter(job => job && typeof job === 'object' && 'lat' in job && 'lng' in job);
-            if (validCoordinates.length > 0) {
-              const bounds = markerClusterGroup.getBounds().pad(0.1);  // Add some padding
-              map.fitBounds(bounds);
-              console.log('Map bounds updated');
-            }
-          } else {
-            map.setView([20, 0], 3);  // Reset to default view if no jobs
-          }
         }
 
         function getEmojiForIndustry(industry) {
@@ -645,92 +473,30 @@
           }
         }
 
-        function createCustomIcon(emoji) {
-          return L.divIcon({
-            html: `<div class="job-marker-icon" style="background-color: #ff9800; color: white;"><span class="job-marker">${emoji}</span></div>`,
-            className: '',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
-          });
-        }
+        // Update event listeners
+        filterForm.addEventListener('change', updateFilters);
 
-        filterForm.addEventListener('change', function(e) {
-          console.log('Filter changed:', e.target.name, e.target.value);
-          const formData = new FormData(filterForm);
-          const searchParams = new URLSearchParams(formData);
-          fetchJobs(searchParams);
+        const locationButtons = document.querySelectorAll('.location-filter-btn');
+        const locationFilterInput = document.getElementById('location-filter');
+
+        locationButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            locationButtons.forEach(btn => btn.classList.remove('bg-orange-100', 'border-orange-500'));
+            this.classList.add('bg-orange-100', 'border-orange-500');
+            locationFilterInput.value = this.dataset.location;
+            updateFilters();
+          });
         });
 
-        fetchJobs(new URLSearchParams());
-
+        // Initialize map and fetch initial jobs
         initMap();
+        fetchJobs(new URLSearchParams());
       });
 
       function applyForJob(jobId) {
         console.log(`Applying for job with ID: ${jobId}`);
         alert(`Application submitted for job ID: ${jobId}`);
       }
-
-      document.addEventListener('DOMContentLoaded', function() {
-        const scrollContainer = document.querySelector('.industry-scroll-container');
-        const scrollContent = document.querySelector('.industry-button-container');
-        
-        // Add scroll indicators
-        const scrollWrapper = document.createElement('div');
-        scrollWrapper.className = 'industry-scroll-wrapper';
-        scrollContainer.parentNode.insertBefore(scrollWrapper, scrollContainer);
-        scrollWrapper.appendChild(scrollContainer);
-
-        const leftIndicator = document.createElement('div');
-        leftIndicator.className = 'scroll-indicator scroll-left';
-        leftIndicator.innerHTML = '◀';
-        scrollWrapper.appendChild(leftIndicator);
-
-        const rightIndicator = document.createElement('div');
-        rightIndicator.className = 'scroll-indicator scroll-right';
-        rightIndicator.innerHTML = '▶';
-        scrollWrapper.appendChild(rightIndicator);
-
-        // Scroll functions
-        leftIndicator.addEventListener('click', () => {
-          scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
-        });
-
-        rightIndicator.addEventListener('click', () => {
-          scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
-        });
-
-        // Show/hide indicators based on scroll position
-        function updateIndicators() {
-          leftIndicator.style.display = scrollContainer.scrollLeft > 0 ? 'flex' : 'none';
-          rightIndicator.style.display = 
-            scrollContainer.scrollLeft < scrollContent.offsetWidth - scrollContainer.offsetWidth ? 'flex' : 'none';
-        }
-
-        scrollContainer.addEventListener('scroll', updateIndicators);
-        window.addEventListener('resize', updateIndicators);
-        updateIndicators();
-      });
-
-      document.addEventListener('DOMContentLoaded', function() {
-        const locationButtons = document.querySelectorAll('.location-filter-btn');
-        const locationFilterInput = document.getElementById('location-filter');
-
-        locationButtons.forEach(button => {
-          button.addEventListener('click', function() {
-            locationButtons.forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
-            locationFilterInput.value = this.dataset.location;
-            updateFilters();
-          });
-        });
-
-        function updateFilters() {
-          const formData = new FormData(document.getElementById('job-filter-form'));
-          const searchParams = new URLSearchParams(formData);
-          fetchJobs(searchParams);
-        }
-      });
     <% end %>
 </body>
 </html>

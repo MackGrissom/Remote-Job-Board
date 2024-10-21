@@ -62,18 +62,19 @@
   <% end %>
 <% end %>
 
-<% if Rails.env.development? %>
-  <div class="bg-gray-100 border border-gray-300 text-gray-700 p-4 mt-4">
-    <h4 class="font-bold">Debug Information:</h4>
-    <p>Jobs count: <%= jobs&.count || 'N/A' %></p>
-    <p>Jobs class: <%= jobs.class.name %></p>
-    <% if jobs.respond_to?(:first) && (sample_job = jobs.first) %>
-      <p>Sample job attributes:</p>
-      <ul>
-        <% sample_job.attributes.each do |attr, value| %>
-          <li><%= attr %>: <%= value.inspect %></li>
-        <% end %>
-      </ul>
-    <% end %>
-  </div>
+<% if @jobs.any? %>
+  <% @jobs.each do |job| %>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+      <h3 class="text-xl font-semibold text-gray-800"><%= job.title %></h3>
+      <p class="text-gray-600"><%= job.company %></p>
+      <p class="text-gray-600"><%= job.location %></p>
+      <p class="text-gray-600"><%= job.industry %></p>
+      <!-- Add more job details as needed -->
+    </div>
+  <% end %>
+<% else %>
+  <p class="text-center text-gray-600">No jobs found matching your criteria.</p>
 <% end %>
+
+<!-- Remove or comment out the debug information -->
+<%# Debug Information removed %>

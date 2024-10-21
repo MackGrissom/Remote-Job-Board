@@ -2,6 +2,7 @@ class Job < ApplicationRecord
   validates :title, :description, :company, :location, :job_type, :salary_min, :salary_max, :apply_link, :experience_level, :industry, presence: true
   validates :salary_min, :salary_max, numericality: { greater_than_or_equal_to: 0 }
   validate :salary_max_greater_than_salary_min
+  validates :job_type, inclusion: { in: ['Remote', 'remote', 'REMOTE'] }
 
   geocoded_by :location
   after_validation :geocode, if: ->(obj){ obj.location.present? && obj.location_changed? }
@@ -43,7 +44,7 @@ class Job < ApplicationRecord
     jobs
   end
 
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :job_applications
   has_many :applicants, through: :job_applications, source: :user
 end

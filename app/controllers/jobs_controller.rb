@@ -8,23 +8,34 @@ class JobsController < ApplicationController
   # GET /jobs or /jobs.json
   def index
     @jobs = Job.all
+    @jobs = @jobs.where(continent: params[:location]) if params[:location].present?
+    # Add other filters as needed
 
-    if params[:industry].present?
-      @jobs = @jobs.where(industry: params[:industry])
-    end
-
-    if params[:location].present?
-      @jobs = @jobs.where(location: params[:location])
-    end
+    @total_count = @jobs.count
+    @jobs = @jobs.limit(100) # Limit to 100 jobs
 
     respond_to do |format|
       format.html
-      format.json {
+      format.json do
         render json: {
-          job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
-          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, industry: job.industry } }
+          job_listings_html: render_to_string(partial: 'jobs/job_listings', locals: { jobs: @jobs }, formats: [:html]),
+          job_coordinates: @jobs.map { |job| 
+            { 
+              lat: job.latitude, 
+              lng: job.longitude, 
+              id: job.id, 
+              title: job.title, 
+              company: job.company, 
+              location: job.location,
+              salary_min: job.salary_min,
+              salary_max: job.salary_max,
+              job_type: job.job_type,
+              industry: job.industry
+            } 
+          },
+          total_count: @total_count
         }
-      }
+      end
     end
   end
 

@@ -90,3 +90,4 @@ gem 'geocoder'
 gem 'stripe'
 
 gem 'dotenv-rails', groups: [:development, :test]
+gem 'countries'

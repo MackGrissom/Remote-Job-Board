@@ -1,5 +1,22 @@
 require 'faker'
 
+# Clear existing data
+puts "Clearing existing data..."
+User.destroy_all
+Job.destroy_all
+
+# Create users
+puts "Creating users..."
+10.times do
+  User.create!(
+    email: Faker::Internet.unique.email,
+    password: 'password123',
+    password_confirmation: 'password123'
+  )
+end
+
+puts "Created #{User.count} users"
+
 # Array of locations from USA, Europe, South America, and Asia
 locations = [
   { city: "New York", country: "USA", lat: 40.7128, lon: -74.0060 },
@@ -44,10 +61,33 @@ locations = [
   { city: "Brussels", country: "Belgium", lat: 50.8503, lon: 4.3517 }
 ]
 
-# Clear existing jobs
-Job.destroy_all
+# Tech-related industries
+tech_industries = [
+  'Software Development',
+  'Data Science',
+  'Cybersecurity',
+  'AI/Machine Learning',
+  'Cloud Computing',
+  'DevOps',
+  'UX/UI Design',
+  'Web Development',
+  'Mobile Development',
+  'Network Engineering',
+  'IT Support',
+  'Database Administration',
+  'Blockchain',
+  'IoT',
+  'AR/VR',
+  'Game Development',
+  'Quantum Computing',
+  'Robotics',
+  'Bioinformatics',
+  'Telecommunications',
+  'Other'
+]
 
-# Create 500 jobs
+# Create 100 jobs
+puts "Creating jobs..."
 100.times do
   location = locations.sample
   Job.create!(
@@ -55,15 +95,16 @@ Job.destroy_all
     description: Faker::Lorem.paragraph(sentence_count: 5),
     company: Faker::Company.name,
     location: location[:city] == "Remote" ? "Remote" : "#{location[:city]}, #{location[:country]}",
-    job_type: ["Full-time", "Part-time", "Contract"].sample,
+    job_type: "Remote",
     apply_link: Faker::Internet.url,
-    industry: Faker::Job.field,
+    industry: tech_industries.sample,
     experience_level: ["Entry", "Mid", "Senior"].sample,
     salary_min: rand(30000..80000),
     salary_max: rand(80001..200000),
     latitude: location[:lat],
-    longitude: location[:lon]
+    longitude: location[:lon],
+    user: User.all.sample
   )
 end
 
-puts "Created #{Job.count} jobs"
+puts "Created #{Job.count} tech-related remote jobs"
