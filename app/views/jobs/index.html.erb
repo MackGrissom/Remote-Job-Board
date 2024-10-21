@@ -167,54 +167,40 @@
         .industry-filter-btn.active {
             @apply bg-orange-100 border-orange-500;
         }
-        
+
         /* Add these new styles */
-        .modal {
-            display: none;
-            position: fixed;
+        #map-filter-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
+            padding: 10px 15px;
+            font-size: 16px;
             font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-        }
-        .filter-tag {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            background-color: #e5e7eb;
-            border-radius: 9999px;
-            padding: 0.25rem 0.75rem;
-            margin: 0.25rem;
-            font-size: 0.875rem;
-            color: #4b5563;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
         }
-        .filter-tag .remove {
-            margin-left: 0.5rem;
-            cursor: pointer;
-            font-weight: bold;
+
+        #map-filter-btn:hover {
+            background-color: #f57c00;
+        }
+
+        #map-filter-btn svg {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            #map-filter-btn {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
@@ -222,9 +208,6 @@
     <div class="flex flex-col h-full">
         <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
             <h2 class="text-xl font-bold text-gray-800">Job Listings</h2>
-            <button id="filterBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                Filters
-            </button>
         </div>
 
         <div id="activeFilters" class="p-4 bg-white border-b border-gray-200 flex flex-wrap"></div>
@@ -235,8 +218,14 @@
                     <!-- Job listings will be dynamically inserted here -->
                 </div>
             </div>
-            <div class="w-full md:w-1/2">
+            <div class="w-full md:w-1/2 relative">
                 <div id="map" class="w-full h-full min-h-[300px] md:min-h-[500px]"></div>
+                <button id="map-filter-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                    </svg>
+                    Job Filters
+                </button>
             </div>
         </div>
     </div>
@@ -369,8 +358,6 @@
           zoomToContinent(selectedLocation);
           
           fetchJobs(searchParams);
-          updateActiveFilters();
-          modal.style.display = "none";
         }
 
         function fetchJobs(searchParams) {
@@ -570,56 +557,24 @@
         initMap();
         fetchJobs(new URLSearchParams());
 
-        // Modal functionality
+        // Update modal functionality
         const modal = document.getElementById("filterModal");
-        const btn = document.getElementById("filterBtn");
+        const mapFilterBtn = document.getElementById("map-filter-btn");
         const span = document.getElementsByClassName("close")[0];
         const activeFiltersContainer = document.getElementById("activeFilters");
 
-        btn.onclick = function() {
-          modal.style.display = "block";
+        mapFilterBtn.onclick = function() {
+            modal.style.display = "block";
         }
 
         span.onclick = function() {
-          modal.style.display = "none";
+            modal.style.display = "none";
         }
 
         window.onclick = function(event) {
-          if (event.target == modal) {
-            modal.style.display = "none";
-          }
-        }
-
-        function updateActiveFilters() {
-          activeFiltersContainer.innerHTML = '';
-          const location = locationFilterInput.value;
-          const industry = industryFilterInput.value;
-
-          if (location) {
-            addFilterTag('Location', location);
-          }
-          if (industry) {
-            addFilterTag('Industry', industry);
-          }
-        }
-
-        function addFilterTag(type, value) {
-          const tag = document.createElement('span');
-          tag.className = 'filter-tag';
-          tag.innerHTML = `${type}: ${value} <span class="remove" data-type="${type.toLowerCase()}">×</span>`;
-          activeFiltersContainer.appendChild(tag);
-
-          tag.querySelector('.remove').addEventListener('click', function() {
-            const filterType = this.dataset.type;
-            if (filterType === 'location') {
-              locationFilterInput.value = '';
-              locationButtons.forEach(btn => btn.classList.remove('bg-orange-100', 'border-orange-500'));
-            } else if (filterType === 'industry') {
-              industryFilterInput.value = '';
-              industryButtons.forEach(btn => btn.classList.remove('active'));
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
-            updateFilters();
-          });
         }
       });
 
