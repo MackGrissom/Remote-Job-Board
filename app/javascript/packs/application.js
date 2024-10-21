@@ -1,57 +1,20 @@
-// app/javascript/packs/application.js
+// This file is automatically compiled by Webpack, along with any other files
+// present in this directory. You're encouraged to place your actual application logic in
+// a relevant structure within app/javascript and only use these pack files to reference
+// that code so it'll be compiled.
 
-import Rails from "@rails/ujs";
-import Turbolinks from "turbolinks";
-import * as ActiveStorage from "@rails/storage";
-import { debounce } from "lodash"; // You can install lodash for debouncing
-Rails.start();
-Turbolinks.start();
-ActiveStorage.start();
+require("@rails/ujs").start()
+require("turbolinks").start()
+require("@rails/activestorage").start()
+require("channels")
 
-document.addEventListener('DOMContentLoaded', () => {
-  const jobsSection = document.querySelector('.jobs-section');
-  const loading = document.querySelector('.loading-indicator');
-  let currentPage = 1; // Track the current page for lazy loading
-  let isLoading = false; // To prevent multiple requests
+// Uncomment to copy all static images under ../images to the output folder and reference
+// them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
+// or the `imagePath` JavaScript helper below.
+//
+// const images = require.context('../images', true)
+// const imagePath = (name) => images(name, true)
 
-  const loadJobs = async () => {
-    if (isLoading) return;
-
-    isLoading = true;
-    loading.classList.remove('hidden'); // Show loading indicator
-
-    const location = document.getElementById('location').value;
-    const response = await fetch(`/jobs?page=${currentPage}&location=${location}`);
-
-    if (response.ok) {
-      const jobsHtml = await response.text();
-      jobsSection.insertAdjacentHTML('beforeend', jobsHtml);
-      currentPage++;
-    } else {
-      console.error('Failed to load jobs:', response.status);
-    }
-
-    loading.classList.add('hidden'); // Hide loading indicator
-    isLoading = false;
-  };
-
-  const onScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-    if (scrollTop + clientHeight >= scrollHeight - 10) {
-      loadJobs();
-    }
-  };
-
-  window.addEventListener('scroll', debounce(onScroll, 200));
-
-  // Filter functionality
-  document.getElementById('location').addEventListener('change', () => {
-    currentPage = 1; // Reset current page for new filter
-    jobsSection.innerHTML = ''; // Clear existing jobs
-    loadJobs(); // Load jobs based on the selected filter
-  });
-
-  // Initial job load
-  loadJobs();
-});
+// Add your custom JavaScript here
+require("../city_autocomplete")
+require("../country_city_dropdown")

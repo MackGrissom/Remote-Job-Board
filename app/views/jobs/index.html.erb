@@ -167,11 +167,84 @@
         .industry-filter-btn.active {
             @apply bg-orange-100 border-orange-500;
         }
+        
+        /* Add these new styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        .filter-tag .remove {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="flex flex-col h-full bg-gray-100">
     <div class="flex flex-col h-full">
-        <div class="p-4 bg-gray-50 border-b border-gray-200">
+        <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-gray-800">Job Listings</h2>
+            <button id="filterBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Filters
+            </button>
+        </div>
+
+        <div id="activeFilters" class="p-4 bg-white border-b border-gray-200 flex flex-wrap"></div>
+
+        <div class="flex-grow flex flex-col md:flex-row">
+            <div class="w-full md:w-1/2 flex flex-col">
+                <div id="job-listings" class="flex-grow overflow-y-auto p-4 space-y-4">
+                    <!-- Job listings will be dynamically inserted here -->
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div id="map" class="w-full h-full min-h-[300px] md:min-h-[500px]"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filterModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
             <h2 class="text-xl font-bold mb-4 text-gray-800">Job Filters</h2>
             <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
                 <div>
@@ -213,17 +286,6 @@
                     <%= f.hidden_field :industry, id: 'industry-filter' %>
                 </div>
             <% end %>
-        </div>
-
-        <div class="flex-grow flex flex-col md:flex-row">
-            <div class="w-full md:w-1/2 flex flex-col">
-                <div id="job-listings" class="flex-grow overflow-y-auto p-4 space-y-4">
-                    <!-- Job listings will be dynamically inserted here -->
-                </div>
-            </div>
-            <div class="w-full md:w-1/2">
-                <div id="map" class="w-full h-full min-h-[300px] md:min-h-[500px]"></div>
-            </div>
         </div>
     </div>
 
@@ -307,6 +369,8 @@
           zoomToContinent(selectedLocation);
           
           fetchJobs(searchParams);
+          updateActiveFilters();
+          modal.style.display = "none";
         }
 
         function fetchJobs(searchParams) {
@@ -505,6 +569,58 @@
         // Initialize map and fetch initial jobs
         initMap();
         fetchJobs(new URLSearchParams());
+
+        // Modal functionality
+        const modal = document.getElementById("filterModal");
+        const btn = document.getElementById("filterBtn");
+        const span = document.getElementsByClassName("close")[0];
+        const activeFiltersContainer = document.getElementById("activeFilters");
+
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+        function updateActiveFilters() {
+          activeFiltersContainer.innerHTML = '';
+          const location = locationFilterInput.value;
+          const industry = industryFilterInput.value;
+
+          if (location) {
+            addFilterTag('Location', location);
+          }
+          if (industry) {
+            addFilterTag('Industry', industry);
+          }
+        }
+
+        function addFilterTag(type, value) {
+          const tag = document.createElement('span');
+          tag.className = 'filter-tag';
+          tag.innerHTML = `${type}: ${value} <span class="remove" data-type="${type.toLowerCase()}">×</span>`;
+          activeFiltersContainer.appendChild(tag);
+
+          tag.querySelector('.remove').addEventListener('click', function() {
+            const filterType = this.dataset.type;
+            if (filterType === 'location') {
+              locationFilterInput.value = '';
+              locationButtons.forEach(btn => btn.classList.remove('bg-orange-100', 'border-orange-500'));
+            } else if (filterType === 'industry') {
+              industryFilterInput.value = '';
+              industryButtons.forEach(btn => btn.classList.remove('active'));
+            }
+            updateFilters();
+          });
+        }
       });
 
       function applyForJob(jobId) {

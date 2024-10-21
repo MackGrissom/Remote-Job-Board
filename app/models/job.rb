@@ -3,7 +3,7 @@ class Job < ApplicationRecord
   validates :salary, numericality: { greater_than: 0 }
   validate :salary_max_greater_than_salary_min
   validates :job_type, inclusion: { in: ['Remote', 'remote', 'REMOTE'] }
-  validates :country, :location, presence: true
+  validates :country, :city, :latitude, :longitude, presence: true
   validates :state, presence: true, if: :country_has_states?
 
   def country_has_states?
@@ -11,7 +11,7 @@ class Job < ApplicationRecord
   end
 
   def full_location
-    [location, country].compact.join(', ')
+    [city, country].compact.join(', ')
   end
 
   geocoded_by :full_location

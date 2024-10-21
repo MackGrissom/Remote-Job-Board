@@ -9,22 +9,17 @@ class JobsController < ApplicationController
 
   # GET /jobs or /jobs.json
   def index
-    @jobs = Job.all
-
-    if params[:industry].present?
-      @jobs = @jobs.where(industry: params[:industry])
-    end
-
-    if params[:location].present?
-      @jobs = @jobs.where("location ILIKE ?", "%#{params[:location]}%")
-    end
+    @jobs = Job.all.page(params[:page]).per(10)
+    @jobs = @jobs.where(job_type: params[:job_type]) if params[:job_type].present?
+    @jobs = @jobs.where(experience_level: params[:experience_level]) if params[:experience_level].present?
+    @jobs = @jobs.where(industry: params[:industry]) if params[:industry].present?
 
     respond_to do |format|
       format.html
       format.json {
         render json: {
           job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
-          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, industry: job.industry } }
+          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title } }
         }
       }
     end
