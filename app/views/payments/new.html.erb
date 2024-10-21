@@ -1,0 +1,86 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 px-4 py-8">
+  <div class="w-full max-w-6xl">
+    <h1 class="text-3xl font-bold mb-8 text-center text-orange-800">Choose Your Job Posting Package</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+        <div class="bg-orange-500 text-white py-4 px-6">
+          <h2 class="text-2xl font-semibold">Single Job Posting</h2>
+          <p class="text-3xl font-bold mt-2">$100</p>
+          <p class="text-sm opacity-75">for 60 days</p>
+        </div>
+        <div class="p-6">
+          <ul class="mb-6 space-y-2">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Post one job listing
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              60 days visibility
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Access to applicant profiles
+            </li>
+          </ul>
+          <%= button_to "Select Package", payments_path(package: 'single'), method: :post, class: "w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300" %>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+        <div class="bg-orange-600 text-white py-4 px-6">
+          <h2 class="text-2xl font-semibold">Monthly Subscription</h2>
+          <p class="text-3xl font-bold mt-2">$500</p>
+          <p class="text-sm opacity-75">per month</p>
+        </div>
+        <div class="p-6">
+          <ul class="mb-6 space-y-2">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Post up to 20 job listings
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              30 days visibility for each posting
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Priority support
+            </li>
+          </ul>
+          <%= button_to "Select Package", payments_path(package: 'monthly'), method: :post, class: "w-full bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 transition duration-300" %>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+        <div class="bg-orange-700 text-white py-4 px-6">
+          <h2 class="text-2xl font-semibold">Featured Job Posting</h2>
+          <p class="text-3xl font-bold mt-2">$200</p>
+          <p class="text-sm opacity-75">for 7 days</p>
+        </div>
+        <div class="p-6">
+          <ul class="mb-6 space-y-2">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Top placement in search results
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Highlighted listing
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Social media promotion
+            </li>
+          </ul>
+          <%= button_to "Select Package", payments_path(package: 'featured'), method: :post, class: "w-full bg-orange-700 text-white py-2 px-4 rounded-md hover:bg-orange-800 transition duration-300" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 text-center text-orange-800">
+      <p>Need help choosing? Contact our support team at <a href="mailto:support@example.com" class="text-orange-600 hover:underline">support@example.com</a></p>
+    </div>
+  </div>
+</div>

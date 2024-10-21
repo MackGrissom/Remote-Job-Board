@@ -1,0 +1,44 @@
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden">
+    <div class="bg-gradient-to-r from-orange-500 to-orange-600 py-6 px-8">
+      <h1 class="text-3xl font-extrabold text-white">Application Submitted</h1>
+    </div>
+    <div class="p-8 space-y-6">
+      <div class="bg-green-50 border-l-4 border-green-400 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-green-800">
+              Your application has been successfully submitted!
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-semibold text-gray-900">Application Details</h2>
+      <div class="space-y-4">
+        <p><strong>Job Title:</strong> <%= @job.title %></p>
+        <p><strong>Company:</strong> <%= @job.company %></p>
+        <p><strong>Your Name:</strong> <%= @job_application.full_name %></p>
+        <p><strong>Your Email:</strong> <%= @job_application.email %></p>
+        <% if @job_application.phone.present? %>
+          <p><strong>Your Phone:</strong> <%= @job_application.phone %></p>
+        <% end %>
+        <% if @job_application.linkedin_url.present? %>
+          <p><strong>Your LinkedIn:</strong> <%= @job_application.linkedin_url %></p>
+        <% end %>
+        <% if @job_application.resume.attached? %>
+          <p><strong>Resume:</strong> Attached</p>
+        <% end %>
+      </div>
+      
+      <div class="mt-8">
+        <%= link_to 'Back to Job Listings', jobs_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" %>
+      </div>
+    </div>
+  </div>
+</div>

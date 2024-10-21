@@ -1,51 +1,68 @@
-<div class="max-w-4xl mx-auto mt-8">
-  <h1 class="text-3xl font-bold mb-4"><%= @job.title %></h1>
-  
-  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-    <h2 class="text-xl font-semibold mb-4">Job Details</h2>
+<div class="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+    <div class="bg-gradient-to-r from-orange-500 to-orange-600 py-6 px-8">
+      <h1 class="text-3xl font-bold text-white"><%= @job.title %></h1>
+      <p class="text-orange-100 mt-2"><%= @job.company %> • <%= @job.full_location %></p>
+    </div>
     
-    <ul class="mt-2 text-gray-600">
-      <li><strong>Location:</strong> <%= @job.location %></li>
-      <li><strong>Salary Range:</strong> <%= number_to_currency(@job.salary_min) %> - <%= number_to_currency(@job.salary_max) %></li>
-      <li><strong>Company:</strong> <%= @job.company %></li>
-      <li><strong>Posted On:</strong> <%= @job.created_at.strftime("%B %d, %Y") %></li>
-      <li><strong>Job Type:</strong> <%= @job.job_type %></li>
-      <li><strong>Industry:</strong> <%= @job.industry %></li>
-      <li><strong>Experience Level:</strong> <%= @job.experience_level %></li>
-    </ul>
-  </div>
-
-  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-    <h2 class="text-xl font-semibold mb-4">Job Description</h2>
-    <p class="text-gray-700"><%= @job.description %></p>
-  </div>
-
-  <%= link_to 'Apply Now', @job.apply_link, class: "inline-block px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-150", target: "_blank" %>
-  <%= link_to 'Back to Jobs', jobs_path, class: "inline-block ml-4 px-6 py-3 text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition duration-150" %>
-
-  <% if current_user == @job.user && @applications.any? %>
-    <div class="mt-8">
-      <h2 class="text-2xl font-bold mb-4">Applications</h2>
-      <div class="space-y-4">
-        <% @applications.each do |application| %>
-          <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg font-semibold"><%= application.full_name %></h3>
-            <p class="text-gray-600"><%= application.email %> • <%= application.phone %></p>
-            <p class="mt-2">
-              <%= link_to "LinkedIn Profile", application.linkedin_url, target: "_blank", class: "text-blue-600 hover:underline" %>
-            </p>
-            <% if application.resume.attached? %>
-              <p class="mt-2">
-                <%= link_to "View Resume", rails_blob_path(application.resume, disposition: "inline"), target: "_blank", class: "text-green-600 hover:underline" %>
-              </p>
+    <div class="p-8">
+      <div class="flex flex-wrap items-center justify-between mb-6">
+        <div class="flex items-center space-x-4 mb-4 sm:mb-0">
+          <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">
+            <%= @job.job_type %>
+          </span>
+          <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+            <%= @job.experience_level %>
+          </span>
+        </div>
+        <% if user_signed_in? %>
+          <% if current_user.bookmarked_jobs.include?(@job) %>
+            <%= button_to unbookmark_job_path(@job), method: :delete, class: "text-orange-500 hover:text-orange-600", title: "Unbookmark" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
             <% end %>
-            <div class="mt-4">
-              <h4 class="font-semibold">Cover Letter:</h4>
-              <p class="text-gray-700"><%= application.cover_letter %></p>
-            </div>
-          </div>
+          <% else %>
+            <%= button_to bookmark_job_path(@job), method: :post, class: "text-gray-400 hover:text-orange-500", title: "Bookmark" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+            <% end %>
+          <% end %>
         <% end %>
       </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-700 mb-2">Salary</h2>
+          <p class="text-2xl font-bold text-orange-600">
+            <%= @job.formatted_salary %>
+          </p>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold text-gray-700 mb-2">Industry</h2>
+          <p class="text-xl text-gray-600"><%= @job.industry %></p>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Job Description</h2>
+        <div class="prose max-w-none text-gray-600">
+          <%= simple_format(@job.description) %>
+        </div>
+      </div>
+
+      <div class="bg-orange-50 rounded-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold text-orange-800 mb-4">About <%= @job.company %></h2>
+        <p class="text-orange-700">
+          <%= @job.company %> is a leading company in the <%= @job.industry %> industry. 
+          They are known for their innovative approach and commitment to excellence.
+        </p>
+      </div>
+
+      <div class="flex justify-center">
+        <%= link_to 'Apply Now', apply_job_path(@job), class: "bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300" %>
+      </div>
     </div>
-  <% end %>
+  </div>
 </div>

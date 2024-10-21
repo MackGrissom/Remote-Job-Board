@@ -1,22 +1,25 @@
 <header class="bg-white shadow-md border-b-4 border-orange-500">
   <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center py-4">
-      <div class="flex items-center">
+    <div class="flex flex-col md:flex-row justify-between items-center py-4">
+      <div class="flex items-center mb-4 md:mb-0">
         <%= link_to "Freely", root_path, class: "text-2xl font-bold text-orange-500" %>
-        <span class="text-gray-600 ml-2">Work Freely, Hire Globally</span>
+        <span class="text-gray-600 ml-2 hidden sm:inline">Work Freely, Hire Globally</span>
       </div>
       
-      <div class="flex items-center space-x-4">
+      <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
         <% if user_signed_in? %>
-          <span class="mr-4 text-gray-700">Welcome, <%= current_user.try(:first_name) || current_user.email.split('@').first %></span>
-          <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: " hover:bg-orange-600 text-orange font-bold py-2 px-4 rounded transition duration-150" %>
+          <span class="text-gray-700 text-sm md:text-base">Welcome, <%= current_user.try(:first_name) || current_user.email.split('@').first %></span>
+          <div class="flex space-x-2">
+            <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded text-sm" %>
+            <%= link_to "My Jobs", my_jobs_path, class: "bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded text-sm" %>
+          </div>
         <% else %>
-          <%= link_to "Sign In", new_user_session_path, class: "text-gray-600 hover:text-orange-500 transition duration-150" %>
-          <%= link_to "Sign Up", new_user_registration_path, class: "bg-black text-white hover:bg-orange-600 font-semibold py-2 px-4 rounded-lg transition duration-150" %>
+          <div class="flex space-x-2">
+            <%= link_to "Sign In", new_user_session_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded text-sm" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "bg-black text-white hover:bg-gray-800 font-semibold py-2 px-4 rounded text-sm" %>
+          </div>
         <% end %>
-        <a href="/jobs/new" class="bg-orange-500 text-white hover:bg-orange-600 font-semibold py-2 px-4 rounded-lg transition duration-150">
-          Post a Job
-        </a>
+        <%= link_to "Post a Job", new_job_path, class: "bg-orange-500 text-white hover:bg-orange-600 font-semibold py-2 px-4 rounded text-sm mt-2 md:mt-0" %>
       </div>
     </div>
   </div>

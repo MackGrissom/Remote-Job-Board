@@ -1,64 +1,58 @@
 require 'stripe'
 
 class JobsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:index]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :check_job_posting_ability, only: [:new, :create]
   
   helper_method :industries
+  helper_method :tech_industries
 
   # GET /jobs or /jobs.json
   def index
     @jobs = Job.all
-    @jobs = @jobs.where(continent: params[:location]) if params[:location].present?
-    # Add other filters as needed
 
-    @total_count = @jobs.count
-    @jobs = @jobs.limit(100) # Limit to 100 jobs
+    if params[:industry].present?
+      @jobs = @jobs.where(industry: params[:industry])
+    end
+
+    if params[:location].present?
+      @jobs = @jobs.where("location ILIKE ?", "%#{params[:location]}%")
+    end
 
     respond_to do |format|
       format.html
-      format.json do
+      format.json {
         render json: {
-          job_listings_html: render_to_string(partial: 'jobs/job_listings', locals: { jobs: @jobs }, formats: [:html]),
-          job_coordinates: @jobs.map { |job| 
-            { 
-              lat: job.latitude, 
-              lng: job.longitude, 
-              id: job.id, 
-              title: job.title, 
-              company: job.company, 
-              location: job.location,
-              salary_min: job.salary_min,
-              salary_max: job.salary_max,
-              job_type: job.job_type,
-              industry: job.industry
-            } 
-          },
-          total_count: @total_count
+          job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
+          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, industry: job.industry } }
         }
-      end
+      }
     end
   end
 
   # GET /jobs/1 or /jobs/1.json
   def show
     @job = Job.find(params[:id])
-    @applications = @job.job_applications.includes(:user) if current_user == @job.user
   end
 
   # GET /jobs/new
   def new
-    puts "Stripe API Key: #{Stripe.api_key}"  # Add this line
     @job = Job.new
-    @payment_intent = create_payment_intent
+    @countries = CityService.countries
+    @regions = []
+    @cities = []
   end
 
   # POST /jobs or /jobs.json
   def create
-    @job = Job.new(job_params)
-    
+    @job = current_user.jobs.new(job_params)
     if @job.save
+      current_user.decrement!(:job_posts_available)
       redirect_to @job, notice: 'Job was successfully created.'
     else
+      @countries = CityService.countries
+      @regions = CityService.regions(params[:job][:country]) if params[:job][:country].present?
+      @cities = CityService.cities(params[:job][:country], params[:job][:region]) if params[:job][:country].present?
       render :new
     end
   end
@@ -73,6 +67,66 @@ class JobsController < ApplicationController
     end
   end
 
+  def apply
+    @job = Job.find(params[:id])
+    if user_signed_in?
+      redirect_to new_job_job_application_path(@job)
+    else
+      redirect_to new_user_session_path, alert: "Please log in or sign up to apply for this job."
+    end
+  end
+
+  def my_jobs
+    @applied_jobs = current_user.job_applications.includes(:job)
+    @bookmarked_jobs = current_user.bookmarked_jobs
+    @posted_jobs = current_user.jobs
+  end
+
+  def bookmark
+    @job = Job.find(params[:id])
+    current_user.bookmarked_jobs << @job unless current_user.bookmarked_jobs.include?(@job)
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path, notice: 'Job bookmarked successfully.') }
+      format.js
+    end
+  end
+
+  def unbookmark
+    @job = Job.find(params[:id])
+    current_user.bookmarked_jobs.delete(@job)
+    respond_to do |format|
+      format.html { redirect_back(fallback_location: root_path, notice: 'Job removed from bookmarks.') }
+      format.js
+    end
+  end
+
+  def filter
+    @jobs = Job.all
+
+    if params[:filters].present?
+      params[:filters].each do |key, values|
+        @jobs = @jobs.where(key => values)
+      end
+    end
+
+    if params[:sort_by].present?
+      case params[:sort_by]
+      when 'most-recent'
+        @jobs = @jobs.order(created_at: :desc)
+      when 'salary-high-to-low'
+        @jobs = @jobs.order(salary_max: :desc)
+      when 'salary-low-to-high'
+        @jobs = @jobs.order(salary_min: :asc)
+      when 'salary'
+        @jobs = @jobs.order(salary: :desc)
+      end
+    end
+
+    render json: {
+      job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html])
+    }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_job
@@ -81,10 +135,8 @@ class JobsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def job_params
-      params.require(:job).permit(
-        :title, :company, :description, :job_type, :location,
-        :experience_level, :salary_min, :salary_max, :industry
-      )
+      params.require(:job).permit(:title, :company, :description, :job_type, :country, :location,
+                                :experience_level, :salary, :industry)
     end
 
     def create_payment_intent
@@ -158,12 +210,54 @@ class JobsController < ApplicationController
         'Entertainment': '🎬', 'Environmental': '🌿', 'Fashion': '👗',
         'Finance': '💰', 'Food and Beverage': '🍽️', 'Government': '🏛️',
         'Healthcare': '🏥', 'Hospitality': '🏨', 'Insurance': '🛡️',
-        'Legal': '⚖️', 'Logistics': '🚚', 'Manufacturing': '🏭',
+        'Legal': '️', 'Logistics': '🚚', 'Manufacturing': '🏭',
         'Marketing': '📈', 'Media': '📰', 'Mining': '⛏️',
         'Non-Profit': '🤝', 'Pharmaceuticals': '💊', 'Public Relations': '🗞️',
         'Publishing': '📚', 'Real Estate': '🏠', 'Retail': '🛒',
         'Software': '💻', 'Sports': '⚽', 'Technology': '🔧',
         'Telecommunications': '📞', 'Transportation': '🚆', 'Travel': '✈️'
+      }
+    end
+
+    def check_job_posting_ability
+      unless current_user&.respond_to?(:can_post_job?) && current_user&.can_post_job?
+        redirect_to new_payment_path, alert: "You need to purchase a job posting package to post a job."
+      end
+    end
+
+    def tech_industries
+      {
+        'Software Development': '',
+        'Data Science': '📊',
+        'Cybersecurity': '🔒',
+        'AI/Machine Learning': '🤖',
+        'Cloud Computing': '☁️',
+        'DevOps': '🛠️',
+        'UX/UI Design': '🎨',
+        'Web Development': '🌐',
+        'Mobile Development': '📱',
+        'Network Engineering': '🌐',
+        'IT Support': '🖥️',
+        'Database Administration': '🗄️'
+      }
+    end
+
+    def continents
+      {
+        'north_america': 'North America',
+        'south_america': 'South America',
+        'europe': 'Europe',
+        'asia': 'Asia',
+        'africa': 'Africa',
+        'australia': 'Australia'
+      }
+    end
+
+    def experience_levels
+      {
+        'entry': 'Entry Level',
+        'mid': 'Mid Level',
+        'senior': 'Senior Level'
       }
     end
 end

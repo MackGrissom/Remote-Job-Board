@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -157,63 +157,73 @@
         .marker-cluster span {
             line-height: 30px;
         }
+        @media (max-width: 768px) {
+            #map { height: 300px; }
+            #job-listings { max-height: none; overflow-y: visible; }
+        }
+        .industry-filter-btn {
+            @apply px-3 py-1 text-xs md:text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500;
+        }
+        .industry-filter-btn.active {
+            @apply bg-orange-100 border-orange-500;
+        }
     </style>
 </head>
-<body class="flex flex-col h-screen bg-gray-100">
-    <div class="flex h-full">
-        <div class="w-1/2 flex flex-col overflow-hidden">
-            <div class="flex-1 overflow-y-auto">
-                <div class="p-6 bg-gray-50 border-b border-gray-200">
-                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Job Filters</h2>
-                    <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
-                        <div>
-                            <%= f.label :location, "Location", class: "block text-sm font-medium text-gray-700 mb-2" %>
-                            <div class="flex flex-wrap gap-2">
-                                <button type="button" 
-                                        class="location-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                                        data-location="">
-                                    🌍 All Locations
-                                </button>
-                                <% [
-                                    ['🌎', 'North America'],
-                                    ['🌎', 'South America'],
-                                    ['🌍', 'Europe'],
-                                    ['🌏', 'Asia'],
-                                    ['🌍', 'Africa'],
-                                    ['🌏', 'Australia']
-                                ].each do |emoji, continent| %>
-                                    <button type="button" 
-                                            class="location-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                                            data-location="<%= continent %>">
-                                        <%= emoji %> <%= continent %>
-                                    </button>
-                                <% end %>
-                            </div>
-                            <%= f.hidden_field :location, id: 'location-filter' %>
-                        </div>
-                        <div>
-                            <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700 mb-2" %>
-                            <%= f.select :industry, 
-                              options_for_select(
-                                industries.map { |industry, emoji| ["#{emoji} #{industry}", industry] },
-                                params[:industry]
-                              ),
-                              { include_blank: "All Industries" },
-                              { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md" }
-                            %>
-                        </div>
-                    <% end %>
+<body class="flex flex-col h-full bg-gray-100">
+    <div class="flex flex-col h-full">
+        <div class="p-4 bg-gray-50 border-b border-gray-200">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Job Filters</h2>
+            <%= form_with url: jobs_path, method: :get, local: false, id: 'job-filter-form', class: 'space-y-4' do |f| %>
+                <div>
+                    <%= f.label :location, "Location", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" 
+                                class="location-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                                data-location="">
+                            🌍 All Locations
+                        </button>
+                        <% [
+                            ['🌎', 'North America'],
+                            ['🌎', 'South America'],
+                            ['🌍', 'Europe'],
+                            ['🌏', 'Asia'],
+                            ['🌍', 'Africa'],
+                            ['🌏', 'Australia']
+                        ].each do |emoji, continent| %>
+                            <button type="button" 
+                                    class="location-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                                    data-location="<%= continent %>">
+                                <%= emoji %> <%= continent %>
+                            </button>
+                        <% end %>
+                    </div>
+                    <%= f.hidden_field :location, id: 'location-filter' %>
                 </div>
-                <div id="job-listings" class="p-6 space-y-6">
+
+                <div>
+                    <%= f.label :industry, "Industry", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                    <div class="flex flex-wrap gap-2">
+                        <%= button_tag "All Industries", type: "button", class: "industry-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 active", data: { industry: "" } %>
+                        <% tech_industries.each do |industry, emoji| %>
+                            <%= button_tag type: "button", class: "industry-filter-btn px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500", data: { industry: industry } do %>
+                                <%= emoji %> <%= industry %>
+                            <% end %>
+                        <% end %>
+                    </div>
+                    <%= f.hidden_field :industry, id: 'industry-filter' %>
+                </div>
+            <% end %>
+        </div>
+
+        <div class="flex-grow flex flex-col md:flex-row">
+            <div class="w-full md:w-1/2 flex flex-col">
+                <div id="job-listings" class="flex-grow overflow-y-auto p-4 space-y-4">
                     <!-- Job listings will be dynamically inserted here -->
                 </div>
-                
-                <!-- Add the footer here -->
-                <%= render 'layouts/footer' %>
             </div>
-        </div>
-        <div class="w-1/2 relative">
-            <div id="map" class="absolute inset-0"></div>
+            <div class="w-full md:w-1/2">
+                <div id="map" class="w-full h-full min-h-[300px] md:min-h-[500px]"></div>
+            </div>
         </div>
     </div>
 
@@ -292,6 +302,8 @@
           const searchParams = new URLSearchParams(formData);
           
           const selectedLocation = formData.get('location');
+          const selectedIndustry = formData.get('industry');
+          
           zoomToContinent(selectedLocation);
           
           fetchJobs(searchParams);
@@ -408,57 +420,47 @@
           });
 
           map.addLayer(markerClusterGroup);
+          
+          // Adjust map size for mobile
+          function adjustMapSize() {
+            const mapContainer = document.getElementById('map');
+            if (window.innerWidth <= 768) {
+              mapContainer.style.height = '300px';
+            } else {
+              mapContainer.style.height = '100%';
+            }
+            map.invalidateSize();
+          }
+
+          window.addEventListener('resize', adjustMapSize);
+          adjustMapSize();
         }
 
         function getEmojiForIndustry(industry) {
           const emojiMap = {
-            'Accounting': '📊',
-            'Advertising': '📢',
-            'Aerospace': '✈️',
-            'Agriculture': '🌾',
-            'Automotive': '🚗',
-            'Banking': '🏦',
-            'Biotechnology': '🧬',
-            'Broadcasting': '📺',
-            'Business Services': '💼',
-            'Chemicals': '⚗️',
-            'Communications': '📡',
-            'Construction': '🏗️',
-            'Consulting': '🗣️',
-            'Consumer Products': '🛍️',
-            'Education': '🎓',
-            'Electronics': '🔌',
-            'Energy': '⚡',
-            'Engineering': '🛠️',
-            'Entertainment': '🎬',
-            'Environmental': '🌿',
-            'Fashion': '👗',
-            'Finance': '💰',
-            'Food and Beverage': '🍽️',
-            'Government': '🏛️',
-            'Healthcare': '🏥',
-            'Hospitality': '🏨',
-            'Insurance': '🛡️',
-            'Legal': '⚖️',
-            'Logistics': '🚚',
-            'Manufacturing': '🏭',
-            'Marketing': '📈',
-            'Media': '📰',
-            'Mining': '⛏️',
-            'Non-Profit': '🤝',
-            'Pharmaceuticals': '💊',
-            'Public Relations': '🗞️',
-            'Publishing': '📚',
-            'Real Estate': '🏠',
-            'Retail': '🛒',
-            'Software': '💻',
-            'Sports': '⚽',
-            'Technology': '🔧',
-            'Telecommunications': '📞',
-            'Transportation': '🚆',
-            'Travel': '✈️'
+            'Software Development': '💻',
+            'Data Science': '📊',
+            'Cybersecurity': '🔒',
+            'AI/Machine Learning': '🤖',
+            'Cloud Computing': '☁️',
+            'DevOps': '🛠️',
+            'UX/UI Design': '🎨',
+            'Web Development': '🌐',
+            'Mobile Development': '📱',
+            'Network Engineering': '🌐',
+            'IT Support': '🖥️',
+            'Database Administration': '🗄️',
+            'Blockchain': '🔗',
+            'IoT': '🏠',
+            'AR/VR': '👓',
+            'Game Development': '🎮',
+            'Quantum Computing': '🔬',
+            'Robotics': '🦾',
+            'Bioinformatics': '🧬',
+            'Telecommunications': '📡',
+            'Other': '🔧'
           };
-          return emojiMap[industry] || '🏢';
+          return emojiMap[industry] || '👨‍💻';
         }
 
         function getSalaryRange(min, max) {
@@ -488,14 +490,25 @@
           });
         });
 
+        const industryButtons = document.querySelectorAll('.industry-filter-btn');
+        const industryFilterInput = document.getElementById('industry-filter');
+
+        industryButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            industryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            industryFilterInput.value = this.dataset.industry;
+            updateFilters();
+          });
+        });
+
         // Initialize map and fetch initial jobs
         initMap();
         fetchJobs(new URLSearchParams());
       });
 
       function applyForJob(jobId) {
-        console.log(`Applying for job with ID: ${jobId}`);
-        alert(`Application submitted for job ID: ${jobId}`);
+        window.location.href = `/jobs/${jobId}/apply`;
       }
     <% end %>
 </body>

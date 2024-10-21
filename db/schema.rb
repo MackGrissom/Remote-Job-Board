@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_15_134253) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_21_050301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,15 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_15_134253) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "bookmarks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "job_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_bookmarks_on_job_id"
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
   create_table "job_applications", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "job_id", null: false
@@ -49,6 +58,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_15_134253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "cover_letter"
+    t.string "full_name"
+    t.string "email"
+    t.string "phone"
+    t.string "linkedin_url"
+    t.string "country"
+    t.string "region"
+    t.string "city"
     t.index ["job_id"], name: "index_job_applications_on_job_id"
     t.index ["user_id"], name: "index_job_applications_on_user_id"
   end
@@ -95,12 +111,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_15_134253) do
     t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
+    t.integer "job_posts_available"
+    t.datetime "subscription_expires_at"
+    t.integer "featured_posts_available"
+    t.datetime "featured_expires_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bookmarks", "jobs"
+  add_foreign_key "bookmarks", "users"
   add_foreign_key "job_applications", "jobs"
   add_foreign_key "job_applications", "users"
   add_foreign_key "jobs", "users"

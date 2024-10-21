@@ -9,8 +9,8 @@
 <% else %>
   <p class="mb-4">Total jobs found: <%= jobs.count %></p>
   <% jobs.each do |job| %>
-    <div class="relative group mb-4 cursor-pointer">
-      <a href="<%= job_path(job) %>" class="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 transition-all duration-300 ease-in-out group-hover:shadow-lg">
+    <div class="relative group mb-4">
+      <%= link_to job_path(job), class: "block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 transition-all duration-300 ease-in-out group-hover:shadow-lg" do %>
         <span class="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-orange-400 via-orange-500 to-red-500"></span>
 
         <div class="sm:flex sm:justify-between sm:gap-4">
@@ -50,14 +50,34 @@
             <dd class="text-xs text-gray-500">$<%= job.salary_min %> - $<%= job.salary_max %></dd>
           </div>
         </dl>
-      </a>
+      <% end %>
 
       <div class="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-90 transition-all duration-300 ease-in-out">
         <div class="text-white text-center">
-          <p class="text-3xl font-bold mb-2">Click to Apply!</p>
+          <%= link_to apply_job_path(job), class: "block text-3xl font-bold mb-2 hover:underline" do %>
+            Click to Apply!
+          <% end %>
           <p class="text-lg">Exciting opportunity awaits</p>
         </div>
       </div>
+
+      <% if user_signed_in? %>
+        <div class="absolute top-2 right-2 z-10">
+          <% if current_user.bookmarked_jobs.include?(job) %>
+            <%= button_to unbookmark_job_path(job), method: :delete, class: "text-orange-500 hover:text-orange-600", title: "Unbookmark" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+            <% end %>
+          <% else %>
+            <%= button_to bookmark_job_path(job), method: :post, class: "text-gray-400 hover:text-orange-500", title: "Bookmark" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 <% end %>
@@ -78,3 +98,36 @@
 
 <!-- Remove or comment out the debug information -->
 <%# Debug Information removed %>
+
+<% jobs.each do |job| %>
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        <%= job.title %>
+      </h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        <%= job.company %> • <%= job.location %>
+      </p>
+    </div>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+      <dl class="sm:divide-y sm:divide-gray-200">
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Industry
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= job.industry %>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Salary Range
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= number_to_currency(job.salary_min) %> - <%= number_to_currency(job.salary_max) %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+<% end %>

@@ -1,11 +1,21 @@
 class Job < ApplicationRecord
-  validates :title, :description, :company, :location, :job_type, :salary_min, :salary_max, :apply_link, :experience_level, :industry, presence: true
-  validates :salary_min, :salary_max, numericality: { greater_than_or_equal_to: 0 }
+  validates :title, :description, :company, :location, :job_type, :salary, :apply_link, :experience_level, :industry, presence: true
+  validates :salary, numericality: { greater_than: 0 }
   validate :salary_max_greater_than_salary_min
   validates :job_type, inclusion: { in: ['Remote', 'remote', 'REMOTE'] }
+  validates :country, :location, presence: true
+  validates :state, presence: true, if: :country_has_states?
 
-  geocoded_by :location
-  after_validation :geocode, if: ->(obj){ obj.location.present? && obj.location_changed? }
+  def country_has_states?
+    ['US', 'CA', 'AU'].include?(country)
+  end
+
+  def full_location
+    [location, country].compact.join(', ')
+  end
+
+  geocoded_by :full_location
+  after_validation :geocode, if: ->(obj){ obj.full_location.present? && (obj.location_changed? || obj.country_changed?) }
 
   def geocode
     begin
@@ -47,4 +57,18 @@ class Job < ApplicationRecord
   belongs_to :user, optional: true
   has_many :job_applications
   has_many :applicants, through: :job_applications, source: :user
+  has_many :bookmarks
+  has_many :bookmarking_users, through: :bookmarks, source: :user
+
+  scope :featured, -> { where('featured_until > ?', Time.current).order(featured_until: :desc) }
+  scope :regular, -> { where('featured_until IS NULL OR featured_until <= ?', Time.current) }
+
+  def feature!
+    update(featured_until: 7.days.from_now)
+    user.decrement!(:featured_posts_available)
+  end
+
+  def formatted_salary
+    "Starting at #{ActionController::Base.helpers.number_to_currency(salary, precision: 0)}"
+  end
 end

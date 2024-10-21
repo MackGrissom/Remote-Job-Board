@@ -1,0 +1,19 @@
+<div class="relative inline-block px-4 text-left">
+  <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" aria-expanded="false">
+    <span><%= title %></span>
+    <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden filter-dropdown" data-filter-type="<%= param_name %>">
+    <form class="space-y-4">
+      <% options.each_with_index do |(key, value), index| %>
+        <div class="flex items-center">
+          <input id="filter-<%= param_name %>-<%= index %>" name="<%= param_name %>[]" value="<%= key %>" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+          <label for="filter-<%= param_name %>-<%= index %>" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"><%= value %></label>
+        </div>
+      <% end %>
+    </form>
+  </div>
+</div>

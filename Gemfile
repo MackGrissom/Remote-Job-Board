@@ -90,4 +90,10 @@ gem 'geocoder'
 gem 'stripe'
 
 gem 'dotenv-rails', groups: [:development, :test]
-gem 'countries'
+gem 'city-state', '~> 0.1.0'
+
+   gem 'countries', '~> 5.0'
+   gem 'country_select', '~> 8.0'
+
+
+gem 'countries_regions_and_cities_by_pete', '~> 0.3.0'
