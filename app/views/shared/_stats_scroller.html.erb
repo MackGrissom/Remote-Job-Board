@@ -1,0 +1,53 @@
+<div class="w-full bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg shadow-md">
+  <div class="flex items-center px-4 py-2">
+    <div class="flex-shrink-0 mr-4">
+      <a href="/jobs/new" class="inline-block px-4 py-2 bg-white text-orange-600 font-bold rounded-md hover:bg-orange-100 transition duration-300 ease-in-out shadow-md hover:shadow-lg transform hover:-translate-y-1">
+        Post A Job
+      </a>
+    </div>
+    <div class="flex-grow overflow-hidden">
+      <div class="stats-scroll flex whitespace-nowrap">
+        <% stats.each do |stat| %>
+          <div class="flex-shrink-0 px-4 py-1 flex items-center">
+            <span class="text-lg font-bold text-white"><%= stat[:value] %></span>
+            <span class="ml-2 text-sm text-white"><%= stat[:label] %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.stats-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@media (max-width: 640px) {
+  .stats-scroll {
+    animation: scroll 20s linear infinite;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollContainer = document.querySelector('.stats-scroll');
+  const content = scrollContainer.innerHTML;
+  scrollContainer.innerHTML = content + content;
+
+  function adjustScrollSpeed() {
+    const contentWidth = scrollContainer.scrollWidth / 2;
+    const duration = window.innerWidth <= 640 ? contentWidth / 40 : contentWidth / 25;
+    scrollContainer.style.animationDuration = `${duration}s`;
+  }
+
+  adjustScrollSpeed();
+  window.addEventListener('resize', adjustScrollSpeed);
+});
+</script>

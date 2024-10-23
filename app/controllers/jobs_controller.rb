@@ -9,19 +9,15 @@ class JobsController < ApplicationController
 
   # GET /jobs or /jobs.json
   def index
-    @jobs = Job.all.page(params[:page]).per(10)
-    @jobs = @jobs.where(job_type: params[:job_type]) if params[:job_type].present?
-    @jobs = @jobs.where(experience_level: params[:experience_level]) if params[:experience_level].present?
-    @jobs = @jobs.where(industry: params[:industry]) if params[:industry].present?
+    @jobs = Job.all # Remove any pagination here
 
-    respond_to do |format|
-      format.html
-      format.json {
-        render json: {
-          job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
-          job_coordinates: @jobs.map { |job| { lat: job.latitude, lng: job.longitude, title: job.title } }
-        }
+    if request.xhr?
+      render json: {
+        job_listings_html: render_to_string(partial: 'job_listings', locals: { jobs: @jobs }, formats: [:html]),
+        job_coordinates: @jobs.map { |job| { id: job.id, lat: job.latitude, lng: job.longitude, title: job.title, company: job.company, location: job.location, salary_min: job.salary_min, salary_max: job.salary_max, job_type: job.job_type, industry: job.industry } }
       }
+    else
+      render 'index'
     end
   end
 

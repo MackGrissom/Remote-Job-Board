@@ -82,52 +82,8 @@
   <% end %>
 <% end %>
 
-<% if @jobs.any? %>
-  <% @jobs.each do |job| %>
-    <div class="bg-white shadow-md rounded-lg p-6 mb-4">
-      <h3 class="text-xl font-semibold text-gray-800"><%= job.title %></h3>
-      <p class="text-gray-600"><%= job.company %></p>
-      <p class="text-gray-600"><%= job.location %></p>
-      <p class="text-gray-600"><%= job.industry %></p>
-      <!-- Add more job details as needed -->
-    </div>
-  <% end %>
-<% else %>
-  <p class="text-center text-gray-600">No jobs found matching your criteria.</p>
-<% end %>
+
 
 <!-- Remove or comment out the debug information -->
 <%# Debug Information removed %>
 
-<% jobs.each do |job| %>
-  <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
-    <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">
-        <%= job.title %>
-      </h3>
-      <p class="mt-1 max-w-2xl text-sm text-gray-500">
-        <%= job.company %> • <%= job.location %>
-      </p>
-    </div>
-    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-      <dl class="sm:divide-y sm:divide-gray-200">
-        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
-            Industry
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= job.industry %>
-          </dd>
-        </div>
-        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
-            Salary Range
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= number_to_currency(job.salary_min) %> - <%= number_to_currency(job.salary_max) %>
-          </dd>
-        </div>
-      </dl>
-    </div>
-  </div>
-<% end %>
