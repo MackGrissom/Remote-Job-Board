@@ -202,22 +202,58 @@
                 padding: 8px 12px;
             }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="flex flex-col h-full bg-gray-100">
     <div class="flex flex-col h-full">
-        <div class="p-4 bg-gray-50 border-b border-gray-200 flex flex-col items-center">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Explore Global Remote Opportunities - Work From Anywhere</h2>
-            
-            <%= render partial: 'shared/stats_scroller', locals: {
-                stats: [
-                    { value: '1,000+', label: 'Verified Remote Jobs' },
-                    { value: '150+', label: 'Countries' },
-                    { value: '20,000+', label: 'Jobs Landed' }
-                ]
-            } %>
-        </div>
-
+       
+<div class="p-4 bg-gray-50 border-b border-gray-200 flex flex-col items-center">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Explore Global Remote Opportunities - Work From Anywhere</h2>
+    
+    <%= render partial: 'shared/stats_scroller', locals: {
+        stats: [
+            { value: '1,000+', label: 'Verified Remote Jobs' },
+            { value: '150+', label: 'Countries' },
+            { value: '20,000+', label: 'Jobs Landed' }
+        ]
+    } %>
+</div>
         <div id="activeFilters" class="p-4 bg-white border-b border-gray-200 flex flex-wrap"></div>
 
         <div class="flex-grow flex flex-col md:flex-row">
@@ -281,6 +317,11 @@
                         <% end %>
                     </div>
                     <%= f.hidden_field :industry, id: 'industry-filter' %>
+                </div>
+                <div class="mt-4">
+                    <button type="button" onclick="applyFilters()" class="w-full px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                        Apply Filters
+                    </button>
                 </div>
             <% end %>
         </div>
@@ -583,6 +624,27 @@
             if (event.target == modal) {
                 modal.style.display = "none";
             }
+        }
+
+        // Add this function to update filters when the modal is closed
+        function applyFilters() {
+            updateFilters();
+            modal.style.display = "none";
+        }
+
+        // Add this function to update the active filters display
+        function updateActiveFilters(location, industry) {
+            const activeFiltersContainer = document.getElementById("activeFilters");
+            let activeFiltersHTML = '';
+
+            if (location) {
+                activeFiltersHTML += `<span class="bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">${location}</span>`;
+            }
+            if (industry) {
+                activeFiltersHTML += `<span class="bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">${industry}</span>`;
+            }
+
+            activeFiltersContainer.innerHTML = activeFiltersHTML;
         }
       });
 
